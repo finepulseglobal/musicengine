@@ -8,37 +8,33 @@ function doPost(e) {
     const data = JSON.parse(e.postData.contents);
     const sheet = SpreadsheetApp.openById('1vRM8-GFr8nMQljaZy5E3tNGiONeWttBFviebJBxEu4nY-_TtxaWEFS2I-eQq1-VZTuPTxsebpKv2KeN').getActiveSheet();
     
-    // Prepare row data
+    // Prepare row data matching spreadsheet columns
     const rowData = [
-      new Date(), // Timestamp
+      data.workcode || '',
       data.title || '',
-      data.work_type || '',
-      data.iswc || '',
+      data.catalog_no || '',
+      data.primary_artist || '',
+      data.featured_artist || '',
       data.isrc || '',
       data.duration || '',
-      data.description || '',
-      (data.territories || []).join(', '),
-      data.primary_artist || '',
-      (data.featured_artists || []).join(', '),
-      data.label_name || '',
-      // First writer
-      data.writers && data.writers[0] ? data.writers[0].name : '',
-      data.writers && data.writers[0] ? data.writers[0].ipi : '',
-      data.writers && data.writers[0] ? data.writers[0].isni : '',
-      data.writers && data.writers[0] ? data.writers[0].share : '',
-      data.writers && data.writers[0] ? data.writers[0].role : '',
+      data.release_date || '',
+      data.release_type || '',
+      // First songwriter
+      data.songwriters && data.songwriters[0] ? data.songwriters[0].name : '',
+      data.songwriters && data.songwriters[0] ? data.songwriters[0].ipi : '',
+      data.songwriters && data.songwriters[0] ? data.songwriters[0].isni : '',
       // First publisher
       data.publishers && data.publishers[0] ? data.publishers[0].name : '',
       data.publishers && data.publishers[0] ? data.publishers[0].ipi : '',
       data.publishers && data.publishers[0] ? data.publishers[0].isni : '',
-      data.publishers && data.publishers[0] ? data.publishers[0].share : '',
-      // Files
-      data.files ? data.files.audio : '',
-      data.files ? data.files.artwork : '',
-      data.files ? data.files.lyrics : '',
-      // Additional data as JSON
-      JSON.stringify(data.writers || []),
-      JSON.stringify(data.publishers || [])
+      data.society || '',
+      data.iswc || '',
+      data.territory || '',
+      data.split_info || '',
+      // Additional data as JSON for multiple songwriters/publishers
+      JSON.stringify(data.songwriters || []),
+      JSON.stringify(data.publishers || []),
+      new Date() // Timestamp
     ];
     
     // Add row to sheet
@@ -47,8 +43,8 @@ function doPost(e) {
     return ContentService
       .createTextOutput(JSON.stringify({
         success: true,
-        message: 'Data saved successfully',
-        work_id: 'WRK_' + Math.floor(Math.random() * 10000).toString().padStart(4, '0')
+        message: 'Registration saved successfully',
+        work_id: data.workcode
       }))
       .setMimeType(ContentService.MimeType.JSON);
       
@@ -66,7 +62,7 @@ function doGet(e) {
   return ContentService
     .createTextOutput(JSON.stringify({
       status: 'ok',
-      message: 'Copyright Registration API'
+      message: 'Copyright Registration API Ready'
     }))
     .setMimeType(ContentService.MimeType.JSON);
 }

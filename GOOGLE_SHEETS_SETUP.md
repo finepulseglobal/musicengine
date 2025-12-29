@@ -1,48 +1,47 @@
-# Google Sheets Backend Setup
+# Google Sheets Backend Setup - Updated
 
-## Step 1: Create Google Apps Script
+## Spreadsheet Column Headers
 
-1. Go to [Google Apps Script](https://script.google.com)
-2. Create a new project
-3. Replace the default code with the content from `google-apps-script.js`
-4. Save the project
+Add these exact headers to Row 1 of your Google Sheet:
 
-## Step 2: Deploy as Web App
+| A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Workcode | Title | Catalog No | Primary Artist | Featured Artist | ISRC | Duration | Release Date | Release Type | Songwriter | Songwriter IPI | Songwriter ISNI | Publisher Name | Publisher IPI | Publisher ISNI | Society | ISWC | Territory | Split Info | All Songwriters | All Publishers | Timestamp |
 
-1. Click "Deploy" > "New deployment"
-2. Choose type: "Web app"
-3. Execute as: "Me"
-4. Who has access: "Anyone"
-5. Click "Deploy"
-6. Copy the Web App URL
+## Setup Steps
 
-## Step 3: Update Form
+1. **Create Google Apps Script:**
+   - Go to [script.google.com](https://script.google.com)
+   - Create new project
+   - Replace code with `google-apps-script.js` content
+   - Save project
 
-1. Replace `YOUR_SCRIPT_ID` in `index.html` with your actual script ID from the URL
-2. The URL format is: `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec`
+2. **Deploy Web App:**
+   - Click Deploy > New deployment
+   - Type: Web app
+   - Execute as: Me
+   - Access: Anyone
+   - Deploy and copy URL
 
-## Step 4: Setup Spreadsheet Headers
+3. **Update Form:**
+   - Replace `YOUR_SCRIPT_ID` in `index.html` with your script ID
+   - Script ID is in the URL: `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec`
 
-Add these headers to your Google Sheet (Row 1):
+4. **Test:**
+   - Submit form entry
+   - Verify data appears in spreadsheet
 
-| A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Timestamp | Title | Work Type | ISWC | ISRC | Duration | Description | Territories | Primary Artist | Featured Artists | Label | Writer Name | Writer IPI | Writer ISNI | Writer Share | Writer Role | Publisher Name | Publisher IPI | Publisher ISNI | Publisher Share | Audio File | Artwork | Lyrics | All Writers | All Publishers |
+## Form Features
 
-## Step 5: Test
+- **Auto Work Code Generation** - Unique identifier for each work
+- **Multiple Songwriters** - Plus button to add more
+- **Multiple Publishers** - Plus button to add more  
+- **Territory Selection** - Multi-select dropdown
+- **Complete Data Capture** - All required copyright fields
+- **JSON Backup** - Full songwriter/publisher data in columns T & U
 
-Submit a form entry to verify data appears in your spreadsheet.
+## Data Flow
 
-## Data Structure
+Form → Google Apps Script → Google Sheets
 
-The form will send:
-- Basic work information
-- Territory selections
-- Artist details
-- First writer/publisher in individual columns
-- All writers/publishers as JSON in the last columns
-- File upload names
-
-## Security Note
-
-The Google Apps Script runs with your permissions and can access your Google Drive. Only deploy if you trust the code.
+The first songwriter/publisher appears in individual columns, with complete arrays stored as JSON for reference.
