@@ -25,63 +25,120 @@ function closeLoginModal() {
     if (pollInterval) clearInterval(pollInterval);
 }
 
-function generateQR() {
-    const canvas = document.getElementById('qrcode');
-    const sessionId = 'ME_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    const qrData = `https://musicengine.com/mobile-auth?session=${sessionId}`;
-    
-    if (typeof QRCode === 'undefined') {
-        document.getElementById('qrStatus').textContent = 'Loading QR Code...';
-        return;
-    }
-    
-    // Clear previous QR code
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    QRCode.toCanvas(canvas, qrData, {
-        width: 200,
-        margin: 2,
-        color: {
-            dark: '#007cba',
-            light: '#ffffff'
-        }
-    }, function (error) {
-        if (error) {
-            console.error('QR Code Error:', error);
-            document.getElementById('qrStatus').textContent = 'Error generating QR code';
-        } else {
-            qrCodeGenerated = true;
-            document.getElementById('qrStatus').textContent = 'Scan with your mobile device';
-            startAuthPolling(sessionId);
-        }
-    });
+let qrCodeGenerated = false;
+let loginTimeout;
+let pollInterval;
+let currentSessionId = null;
+
+function openLoginModal() {
+    document.getElementById('loginModal').style.display = 'block';
+    generateQR();
 }
 
-function startAuthPolling(sessionId) {
-    // Simulate authentication polling
+function closeLoginModal() {
+    document.getElementById('loginModal').style.display = 'none';
+    if (loginTimeout) clearTimeout(loginTimeout);
+    if (pollInterval) clearInterval(pollInterval);
+    currentSessionId = null;
+}
+
+async function generateQR() {
+    try {
+        document.getElementById('qrStatus').textContent = 'Generating QR code...';
+        
+        // Create new session
+        const response = await fetch('/api/auth-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to create session');
+        }
+        
+        const { sessionId } = await response.json();
+        currentSessionId = sessionId;
+        
+        const canvas = document.getElementById('qrcode');
+        const qrData = `${window.location.origin}/api/mobile-auth?sessionId=${sessionId}`;
+        
+        if (typeof QRCode === 'undefined') {
+            document.getElementById('qrStatus').textContent = 'Loading QR Code library...';
+            setTimeout(generateQR, 1000);
+            return;
+        }
+        
+        // Clear previous QR code
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        QRCode.toCanvas(canvas, qrData, {
+            width: 200,
+            margin: 2,
+            color: {
+                dark: '#007cba',
+                light: '#ffffff'
+            }
+        }, function (error) {
+            if (error) {
+                console.error('QR Code Error:', error);
+                document.getElementById('qrStatus').textContent = 'Error generating QR code';
+            } else {
+                qrCodeGenerated = true;
+                document.getElementById('qrStatus').textContent = 'Scan with your mobile device';
+                startAuthPolling(sessionId);
+            }
+        });
+        
+    } catch (error) {
+        console.error('Session creation error:', error);
+        document.getElementById('qrStatus').textContent = 'Error creating session. Please try again.';
+    }
+}
+
+async function startAuthPolling(sessionId) {
     let attempts = 0;
-    pollInterval = setInterval(() => {
+    const maxAttempts = 60; // 5 minutes
+    
+    pollInterval = setInterval(async () => {
         attempts++;
         
-        // Simulate successful authentication after 8 seconds
-        if (attempts >= 8) {
-            clearInterval(pollInterval);
-            handleSuccessfulAuth(sessionId);
+        try {
+            const response = await fetch(`/api/auth-session?sessionId=${sessionId}`);
+            
+            if (response.status === 404 || response.status === 410) {
+                clearInterval(pollInterval);
+                document.getElementById('qrStatus').textContent = 'Session expired. Please generate a new QR code.';
+                return;
+            }
+            
+            if (response.ok) {
+                const session = await response.json();
+                
+                if (session.status === 'authenticated' && session.userData) {
+                    clearInterval(pollInterval);
+                    handleSuccessfulAuth(session.userData);
+                    return;
+                }
+            }
+            
+            // Update status
+            document.getElementById('qrStatus').textContent = `Waiting for scan... (${Math.floor((maxAttempts - attempts) * 5 / 60)}:${String((maxAttempts - attempts) * 5 % 60).padStart(2, '0')})`;
+            
+        } catch (error) {
+            console.error('Polling error:', error);
         }
-    }, 1000);
+        
+        // Timeout after max attempts
+        if (attempts >= maxAttempts) {
+            clearInterval(pollInterval);
+            document.getElementById('qrStatus').textContent = 'Session expired. Please generate a new QR code.';
+        }
+    }, 5000); // Poll every 5 seconds
 }
 
-function handleSuccessfulAuth(sessionId) {
+function handleSuccessfulAuth(userData) {
     document.getElementById('qrStatus').textContent = 'Authentication successful! Redirecting...';
-    
-    // Simulate user data
-    const userData = {
-        id: sessionId,
-        name: 'Music Artist',
-        email: 'artist@example.com',
-        plan: 'Creator'
-    };
     
     // Use auth.js login function
     login(userData);
