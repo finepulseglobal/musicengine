@@ -1,57 +1,34 @@
-# Music Engine - React Native App
+# Music Engine - HTML5 Web Application
 
-Cross-platform music copyright management application built with React Native and Expo.
+Complete music copyright management system built with pure HTML5, CSS3, and JavaScript.
 
 ## Features
 
-- **QR Code Login** - Camera-based authentication
 - **Music Registration** - Multi-step copyright registration form
 - **Profile Management** - Artist profiles with team management
-- **Legal Agreements** - Contract generation and management
-- **Cross-Platform** - Web, iOS, Android, and PWA support
-
-## Quick Start
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm start
-
-# Run on specific platforms
-npm run web      # Web browser
-npm run ios      # iOS simulator
-npm run android  # Android emulator
-```
-
-## Platform Support
-
-- **Web**: Runs in any modern browser
-- **iOS**: Native iOS app via Expo
-- **Android**: Native Android app via Expo
-- **PWA**: Progressive Web App capabilities
-
-## Tech Stack
-
-- React Native
-- Expo
-- React Navigation
-- Expo Camera (QR scanning)
-- Document Picker (file uploads)
+- **Services Overview** - Complete service descriptions
+- **About Section** - Company information and contact details
+- **Responsive Design** - Works on all devices
 
 ## Deployment
 
-```bash
-# Build for production
-npm run build:web     # Web deployment
-npm run build:ios     # iOS App Store
-npm run build:android # Google Play Store
-```
+Simply upload `index.html` to any web server or hosting platform.
 
-## Google Sheets Integration
+### Vercel Deployment
+1. Connect GitHub repository to Vercel
+2. Deploy automatically - no build process required
 
-The app includes Google Apps Script integration for form submissions. See `google-apps-script.js` for backend code.
+### Other Hosting Options
+- GitHub Pages
+- Netlify
+- Any web server
+
+## Tech Stack
+
+- HTML5
+- CSS3 (Grid, Flexbox, Animations)
+- Vanilla JavaScript
+- No dependencies or frameworks
 
 ---
 
