@@ -4,76 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Engine - Copyright Management</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        
-        /* Header */
-        header { background: #007cba; color: white; padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; }
-        nav { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: bold; }
-        .nav-links { display: flex; list-style: none; gap: 2rem; }
-        .nav-links a { color: white; text-decoration: none; transition: opacity 0.3s; }
-        .nav-links a:hover { opacity: 0.8; }
-        
-        /* Hero Section */
-        .hero { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center; height: 100vh; display: flex; align-items: center; color: white; text-align: center; margin-top: 60px; }
-        .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
-        .hero p { font-size: 1.2rem; margin-bottom: 2rem; }
-        .btn { background: #007cba; color: white; padding: 12px 24px; border: none; border-radius: 5px; text-decoration: none; display: inline-block; margin: 10px; cursor: pointer; transition: background 0.3s; }
-        .btn:hover { background: #0056b3; }
-        .btn-secondary { background: #6c757d; }
-        .btn-secondary:hover { background: #545b62; }
-        
-        /* Sections */
-        section { padding: 4rem 0; }
-        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; color: #007cba; }
-        
-        /* Features Grid */
-        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 2rem 0; }
-        .feature-card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; border-left: 4px solid #007cba; }
-        .feature-card h3 { color: #007cba; margin-bottom: 1rem; }
-        
-        /* Registration Form */
-        .form-container { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin: 2rem 0; }
-        .form-step { display: none; }
-        .form-step.active { display: block; }
-        .step-indicator { display: flex; justify-content: center; margin-bottom: 2rem; }
-        .step { width: 40px; height: 40px; border-radius: 50%; background: #e9ecef; display: flex; align-items: center; justify-content: center; margin: 0 10px; color: white; font-weight: bold; }
-        .step.active { background: #007cba; }
-        .step.completed { background: #28a745; }
-        
-        .form-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
-        .form-group { flex: 1; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; color: #555; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; }
-        .form-group textarea { height: 100px; resize: vertical; }
-        
-        .dynamic-section { margin: 2rem 0; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .dynamic-entry { background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; position: relative; }
-        .remove-btn { position: absolute; top: 10px; right: 10px; background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
-        
-        .form-navigation { display: flex; justify-content: space-between; margin-top: 2rem; }
-        
-        /* Profile Section */
-        .profile-section { background: #f8f9fa; padding: 2rem; border-radius: 10px; margin: 2rem 0; }
-        
-        /* Footer */
-        footer { background: #333; color: white; text-align: center; padding: 2rem 0; }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .hero h1 { font-size: 2rem; }
-            .form-row { flex-direction: column; }
-            .features { grid-template-columns: 1fr; }
-        }
-        
-        /* Hidden sections */
-        .hidden { display: none; }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Header -->
@@ -81,366 +12,50 @@
         <nav class="container">
             <div class="logo">Music Engine</div>
             <ul class="nav-links">
-                <li><a href="#home" onclick="showSection('home')">Home</a></li>
-                <li><a href="#register" onclick="showSection('register')">Register</a></li>
-                <li><a href="#profile" onclick="showSection('profile')">Profile</a></li>
-                <li><a href="#services" onclick="showSection('services')">Services</a></li>
-                <li><a href="#about" onclick="showSection('about')">About</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="governance.html">Governance</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="register.html" class="btn">Login/Signup</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Home Section -->
-    <section id="home" class="hero">
+    <!-- Hero Section -->
+    <section class="hero">
         <div class="container">
             <h1>Music is the weapon of intellectual</h1>
             <p>Cross-platform music copyright management application</p>
-            <a href="#register" class="btn" onclick="showSection('register')">Register Music</a>
-            <a href="#services" class="btn btn-secondary" onclick="showSection('services')">View Services</a>
+            <a href="register.html" class="btn">Register Music</a>
+            <a href="services.html" class="btn btn-secondary">View Services</a>
         </div>
     </section>
 
-    <!-- Main Platform -->
-    <section id="platform" class="hidden">
+    <!-- Features Section -->
+    <section class="features-section">
         <div class="container">
             <h2 class="section-title">Music Copyright Management Platform</h2>
             <div class="features">
                 <div class="feature-card">
                     <h3>🎵 Music Registration</h3>
                     <p>Complete copyright registration with CWR 2.0 support, metadata management, and blockchain integration.</p>
-                    <button class="btn" onclick="showSection('register')">Register Music</button>
+                    <a href="register.html" class="btn">Register Music</a>
                 </div>
                 <div class="feature-card">
                     <h3>📄 Copyright Portal</h3>
                     <p>Comprehensive copyright management dashboard with international compliance and rights tracking.</p>
-                    <button class="btn">Access Portal</button>
+                    <a href="profile.html" class="btn">Access Portal</a>
                 </div>
                 <div class="feature-card">
                     <h3>💰 Split & Royalty</h3>
                     <p>Automated royalty distribution, split calculations, and transparent payment processing.</p>
-                    <button class="btn">Manage Royalties</button>
+                    <a href="legal.html" class="btn">Manage Royalties</a>
                 </div>
                 <div class="feature-card">
                     <h3>📋 Legal Agreements</h3>
                     <p>Smart contract templates, licensing agreements, and automated legal document generation.</p>
-                    <button class="btn">View Agreements</button>
+                    <a href="legal.html" class="btn">View Agreements</a>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Registration Form -->
-    <section id="register" class="hidden">
-        <div class="container">
-            <h2 class="section-title">Copyright Registration Form</h2>
-            <div class="form-container">
-                <!-- Step Indicator -->
-                <div class="step-indicator">
-                    <div class="step active" id="step1">1</div>
-                    <div class="step" id="step2">2</div>
-                    <div class="step" id="step3">3</div>
-                </div>
-
-                <form id="registrationForm">
-                    <!-- Step 1: Work Information -->
-                    <div class="form-step active" id="formStep1">
-                        <h3>Work Information - Step 1 of 3</h3>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Work Code:</label>
-                                <input type="text" id="workcode" value="WRK123456" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label>Title:</label>
-                                <input type="text" id="title" placeholder="Song title" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Catalog No:</label>
-                                <input type="text" id="catalogNo" placeholder="Catalog number">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Primary Artist:</label>
-                                <input type="text" id="primaryArtist" placeholder="Primary artist name" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Featured Artist:</label>
-                                <input type="text" id="featuredArtist" placeholder="Featured artist (optional)">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>ISRC:</label>
-                                <input type="text" id="isrc" placeholder="USRC17607839">
-                            </div>
-                            <div class="form-group">
-                                <label>Duration:</label>
-                                <input type="text" id="duration" placeholder="03:45">
-                            </div>
-                            <div class="form-group">
-                                <label>Release Date:</label>
-                                <input type="date" id="releaseDate">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Step 2: Session Info & Files -->
-                    <div class="form-step" id="formStep2">
-                        <h3>Session Info, Files & Lyrics - Step 2 of 3</h3>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Recording Location:</label>
-                                <input type="text" id="recordingLocation" placeholder="Studio name or location">
-                            </div>
-                            <div class="form-group">
-                                <label>Key:</label>
-                                <input type="text" id="key" placeholder="C Major, A Minor, etc.">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>BPM:</label>
-                                <input type="number" id="bpm" placeholder="120">
-                            </div>
-                            <div class="form-group">
-                                <label>Language:</label>
-                                <select id="language">
-                                    <option value="EN">English</option>
-                                    <option value="ES">Spanish</option>
-                                    <option value="FR">French</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Music File:</label>
-                            <input type="file" id="musicFile" accept="audio/*">
-                        </div>
-                        <div class="form-group">
-                            <label>Artwork:</label>
-                            <input type="file" id="artworkFile" accept="image/*">
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <input type="checkbox" id="aiGenerated"> This content contains AI-generated material
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <input type="checkbox" id="containsSamples"> This content contains samples from other works
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>Lyrics:</label>
-                            <textarea id="lyrics" placeholder="Enter song lyrics here..."></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Rights & Credits -->
-                    <div class="form-step" id="formStep3">
-                        <h3>Rights & Credits - Step 3 of 3</h3>
-                        
-                        <!-- Songwriters -->
-                        <div class="dynamic-section">
-                            <div class="section-header">
-                                <h4>Songwriters</h4>
-                                <button type="button" class="btn" onclick="addSongwriter()">+ Add</button>
-                            </div>
-                            <div id="songwritersContainer">
-                                <div class="dynamic-entry">
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label>Name:</label>
-                                            <input type="text" placeholder="Songwriter name">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Split %:</label>
-                                            <input type="number" placeholder="50" min="0" max="100">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Publishers -->
-                        <div class="dynamic-section">
-                            <div class="section-header">
-                                <h4>Publishers</h4>
-                                <button type="button" class="btn" onclick="addPublisher()">+ Add</button>
-                            </div>
-                            <div id="publishersContainer">
-                                <div class="dynamic-entry">
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label>Name:</label>
-                                            <input type="text" placeholder="Publisher name">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Split %:</label>
-                                            <input type="number" placeholder="50" min="0" max="100">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Territory:</label>
-                                            <select>
-                                                <option value="WW">Worldwide</option>
-                                                <option value="US">United States</option>
-                                                <option value="EU">Europe</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Navigation -->
-                    <div class="form-navigation">
-                        <button type="button" class="btn btn-secondary" id="prevBtn" onclick="previousStep()" style="display: none;">Previous</button>
-                        <button type="button" class="btn" id="nextBtn" onclick="nextStep()">Next</button>
-                        <button type="submit" class="btn" id="submitBtn" style="display: none;">Submit Registration</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- Profile Section -->
-    <section id="profile" class="hidden">
-        <div class="container">
-            <h2 class="section-title">Artist Profile</h2>
-            <div class="profile-section">
-                <h3>Basic Information</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Legal Name:</label>
-                        <input type="text" placeholder="Your legal name">
-                    </div>
-                    <div class="form-group">
-                        <label>Stage Name:</label>
-                        <input type="text" placeholder="Your stage name">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Email:</label>
-                        <input type="email" placeholder="email@example.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Phone:</label>
-                        <input type="tel" placeholder="+1234567890">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Address:</label>
-                    <textarea placeholder="Your address"></textarea>
-                </div>
-            </div>
-
-            <div class="profile-section">
-                <h3>Social Media & Streaming Links</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Spotify:</label>
-                        <input type="url" placeholder="Spotify URL">
-                    </div>
-                    <div class="form-group">
-                        <label>Apple Music:</label>
-                        <input type="url" placeholder="Apple Music URL">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>YouTube:</label>
-                        <input type="url" placeholder="YouTube URL">
-                    </div>
-                    <div class="form-group">
-                        <label>Instagram:</label>
-                        <input type="url" placeholder="Instagram URL">
-                    </div>
-                </div>
-                <button class="btn">Save Profile</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="hidden">
-        <div class="container">
-            <h2 class="section-title">Our Services</h2>
-            <div class="features">
-                <div class="feature-card">
-                    <h3>Music Registration</h3>
-                    <ul style="text-align: left;">
-                        <li>Complete copyright registration</li>
-                        <li>CWR 2.0 support</li>
-                        <li>Metadata management</li>
-                        <li>Blockchain integration</li>
-                    </ul>
-                </div>
-                <div class="feature-card">
-                    <h3>Copyright Portal</h3>
-                    <ul style="text-align: left;">
-                        <li>Rights tracking dashboard</li>
-                        <li>International compliance</li>
-                        <li>Work registration status</li>
-                        <li>Legal documentation</li>
-                    </ul>
-                </div>
-                <div class="feature-card">
-                    <h3>Split & Royalty Management</h3>
-                    <ul style="text-align: left;">
-                        <li>Automated distribution</li>
-                        <li>Split calculations</li>
-                        <li>Payment processing</li>
-                        <li>Revenue tracking</li>
-                    </ul>
-                </div>
-                <div class="feature-card">
-                    <h3>Legal Agreements</h3>
-                    <ul style="text-align: left;">
-                        <li>Smart contract templates</li>
-                        <li>Production agreements</li>
-                        <li>Publishing contracts</li>
-                        <li>Sampling licenses</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="hidden">
-        <div class="container">
-            <h2 class="section-title">About Music Engine</h2>
-            <div class="feature-card">
-                <h3>Our Mission</h3>
-                <p>Music Engine is dedicated to empowering artists, producers, and music industry professionals with cutting-edge copyright management tools. We believe that music is the weapon of intellectual property, and every creator deserves transparent, secure, and efficient rights management.</p>
-            </div>
-            
-            <div class="features">
-                <div class="feature-card">
-                    <h3>180+</h3>
-                    <p>Countries Supported</p>
-                </div>
-                <div class="feature-card">
-                    <h3>99.9%</h3>
-                    <p>Platform Uptime</p>
-                </div>
-                <div class="feature-card">
-                    <h3>24/7</h3>
-                    <p>Global Support</p>
-                </div>
-                <div class="feature-card">
-                    <h3>100%</h3>
-                    <p>Compliance Rate</p>
-                </div>
-            </div>
-
-            <div class="feature-card">
-                <h3>Contact Us</h3>
-                <p>Email: info@musicengine.com</p>
-                <p>Support: support@musicengine.com</p>
-                <p>Business: business@musicengine.com</p>
             </div>
         </div>
     </section>
@@ -448,138 +63,21 @@
     <!-- Footer -->
     <footer>
         <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="eula.html">EULA</a>
+                    <a href="terms.html">Terms of Usage</a>
+                </div>
+                <div class="social-media">
+                    <a href="#" class="social-icon">📘</a>
+                    <a href="#" class="social-icon">🐦</a>
+                    <a href="#" class="social-icon">📷</a>
+                    <a href="#" class="social-icon">🎵</a>
+                </div>
+            </div>
             <p>&copy; 2024 Music Engine. Powered by Boserena Studio. All rights reserved.</p>
         </div>
     </footer>
-
-    <script>
-        let currentStep = 1;
-
-        function showSection(sectionId) {
-            // Hide all sections
-            const sections = ['home', 'platform', 'register', 'profile', 'services', 'about'];
-            sections.forEach(id => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.classList.add('hidden');
-                }
-            });
-
-            // Show selected section
-            const targetSection = document.getElementById(sectionId);
-            if (targetSection) {
-                targetSection.classList.remove('hidden');
-            }
-
-            // Special handling for home section
-            if (sectionId === 'home') {
-                document.getElementById('home').classList.remove('hidden');
-                document.getElementById('home').style.display = 'flex';
-            }
-        }
-
-        function nextStep() {
-            if (currentStep < 3) {
-                document.getElementById(`formStep${currentStep}`).classList.remove('active');
-                document.getElementById(`step${currentStep}`).classList.add('completed');
-                document.getElementById(`step${currentStep}`).classList.remove('active');
-                
-                currentStep++;
-                
-                document.getElementById(`formStep${currentStep}`).classList.add('active');
-                document.getElementById(`step${currentStep}`).classList.add('active');
-                
-                updateButtons();
-            }
-        }
-
-        function previousStep() {
-            if (currentStep > 1) {
-                document.getElementById(`formStep${currentStep}`).classList.remove('active');
-                document.getElementById(`step${currentStep}`).classList.remove('active');
-                
-                currentStep--;
-                
-                document.getElementById(`formStep${currentStep}`).classList.add('active');
-                document.getElementById(`step${currentStep}`).classList.add('completed');
-                document.getElementById(`step${currentStep}`).classList.add('active');
-                
-                updateButtons();
-            }
-        }
-
-        function updateButtons() {
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const submitBtn = document.getElementById('submitBtn');
-
-            prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
-            nextBtn.style.display = currentStep < 3 ? 'block' : 'none';
-            submitBtn.style.display = currentStep === 3 ? 'block' : 'none';
-        }
-
-        function addSongwriter() {
-            const container = document.getElementById('songwritersContainer');
-            const newEntry = document.createElement('div');
-            newEntry.className = 'dynamic-entry';
-            newEntry.innerHTML = `
-                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Name:</label>
-                        <input type="text" placeholder="Songwriter name">
-                    </div>
-                    <div class="form-group">
-                        <label>Split %:</label>
-                        <input type="number" placeholder="50" min="0" max="100">
-                    </div>
-                </div>
-            `;
-            container.appendChild(newEntry);
-        }
-
-        function addPublisher() {
-            const container = document.getElementById('publishersContainer');
-            const newEntry = document.createElement('div');
-            newEntry.className = 'dynamic-entry';
-            newEntry.innerHTML = `
-                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Name:</label>
-                        <input type="text" placeholder="Publisher name">
-                    </div>
-                    <div class="form-group">
-                        <label>Split %:</label>
-                        <input type="number" placeholder="50" min="0" max="100">
-                    </div>
-                    <div class="form-group">
-                        <label>Territory:</label>
-                        <select>
-                            <option value="WW">Worldwide</option>
-                            <option value="US">United States</option>
-                            <option value="EU">Europe</option>
-                        </select>
-                    </div>
-                </div>
-            `;
-            container.appendChild(newEntry);
-        }
-
-        // Form submission
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Music registration submitted successfully!');
-            showSection('home');
-            currentStep = 1;
-            updateButtons();
-        });
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            showSection('home');
-            updateButtons();
-        });
-    </script>
 </body>
 </html>

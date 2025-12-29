@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Music Engine</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">Music Engine</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="governance.html">Governance</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="register.html" class="btn">Login/Signup</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Profile Content -->
+    <div class="page-content">
+        <div class="container">
+            <h2 class="section-title">Artist Profile Management</h2>
+
+            <!-- Basic Information -->
+            <div class="profile-section">
+                <h3>Basic Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Legal Name:</label>
+                        <input type="text" placeholder="Your legal name">
+                    </div>
+                    <div class="form-group">
+                        <label>Stage Name:</label>
+                        <input type="text" placeholder="Your stage name">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" placeholder="email@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone:</label>
+                        <input type="tel" placeholder="+1234567890">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Address:</label>
+                    <textarea placeholder="Your address"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>IPI Number:</label>
+                        <input type="text" placeholder="IPI number">
+                    </div>
+                    <div class="form-group">
+                        <label>ISNI Number:</label>
+                        <input type="text" placeholder="ISNI number">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Media Links -->
+            <div class="profile-section">
+                <h3>Social Media & Streaming Links</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Spotify:</label>
+                        <input type="url" placeholder="Spotify URL">
+                    </div>
+                    <div class="form-group">
+                        <label>Apple Music:</label>
+                        <input type="url" placeholder="Apple Music URL">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>YouTube:</label>
+                        <input type="url" placeholder="YouTube URL">
+                    </div>
+                    <div class="form-group">
+                        <label>Instagram:</label>
+                        <input type="url" placeholder="Instagram URL">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>TikTok:</label>
+                        <input type="url" placeholder="TikTok URL">
+                    </div>
+                    <div class="form-group">
+                        <label>Facebook:</label>
+                        <input type="url" placeholder="Facebook URL">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Audiomack:</label>
+                        <input type="url" placeholder="Audiomack URL">
+                    </div>
+                    <div class="form-group">
+                        <label>Boomplay:</label>
+                        <input type="url" placeholder="Boomplay URL">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Production Team -->
+            <div class="profile-section">
+                <div class="section-header">
+                    <h3>Production Team</h3>
+                    <button class="btn" onclick="addTeamMember('production')">+ Add Member</button>
+                </div>
+                <div id="productionTeam">
+                    <div class="dynamic-entry">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Name:</label>
+                                <input type="text" placeholder="Team member name">
+                            </div>
+                            <div class="form-group">
+                                <label>Role:</label>
+                                <input type="text" placeholder="Producer, Engineer, etc.">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>IPI:</label>
+                                <input type="text" placeholder="IPI number">
+                            </div>
+                            <div class="form-group">
+                                <label>Location:</label>
+                                <input type="text" placeholder="Location">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- A&R Team -->
+            <div class="profile-section">
+                <div class="section-header">
+                    <h3>A&R Team</h3>
+                    <button class="btn" onclick="addTeamMember('ar')">+ Add Member</button>
+                </div>
+                <div id="arTeam">
+                    <div class="dynamic-entry">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Name:</label>
+                                <input type="text" placeholder="A&R representative name">
+                            </div>
+                            <div class="form-group">
+                                <label>Company:</label>
+                                <input type="text" placeholder="Label or company">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email:</label>
+                                <input type="email" placeholder="Contact email">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone:</label>
+                                <input type="tel" placeholder="Contact phone">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="saveProfile()">Save Profile</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="eula.html">EULA</a>
+                    <a href="terms.html">Terms of Usage</a>
+                </div>
+                <div class="social-media">
+                    <a href="#" class="social-icon">📘</a>
+                    <a href="#" class="social-icon">🐦</a>
+                    <a href="#" class="social-icon">📷</a>
+                    <a href="#" class="social-icon">🎵</a>
+                </div>
+            </div>
+            <p>&copy; 2024 Music Engine. Powered by Boserena Studio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function addTeamMember(type) {
+            const container = document.getElementById(type + 'Team');
+            const newEntry = document.createElement('div');
+            newEntry.className = 'dynamic-entry';
+            
+            if (type === 'production') {
+                newEntry.innerHTML = `
+                    <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Name:</label>
+                            <input type="text" placeholder="Team member name">
+                        </div>
+                        <div class="form-group">
+                            <label>Role:</label>
+                            <input type="text" placeholder="Producer, Engineer, etc.">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>IPI:</label>
+                            <input type="text" placeholder="IPI number">
+                        </div>
+                        <div class="form-group">
+                            <label>Location:</label>
+                            <input type="text" placeholder="Location">
+                        </div>
+                    </div>
+                `;
+            } else {
+                newEntry.innerHTML = `
+                    <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Name:</label>
+                            <input type="text" placeholder="A&R representative name">
+                        </div>
+                        <div class="form-group">
+                            <label>Company:</label>
+                            <input type="text" placeholder="Label or company">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email:</label>
+                            <input type="email" placeholder="Contact email">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone:</label>
+                            <input type="tel" placeholder="Contact phone">
+                        </div>
+                    </div>
+                `;
+            }
+            
+            container.appendChild(newEntry);
+        }
+
+        function saveProfile() {
+            alert('Profile saved successfully!');
+        }
+    </script>
+</body>
+</html>

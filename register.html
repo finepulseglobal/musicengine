@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Music Engine</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">Music Engine</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="governance.html">Governance</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="register.html" class="btn">Login/Signup</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Registration Content -->
+    <div class="page-content">
+        <div class="container">
+            <h2 class="section-title">Copyright Registration Form</h2>
+            <div class="form-container">
+                <!-- Step Indicator -->
+                <div class="step-indicator">
+                    <div class="step active" id="step1">1</div>
+                    <div class="step" id="step2">2</div>
+                    <div class="step" id="step3">3</div>
+                </div>
+
+                <form id="registrationForm">
+                    <!-- Step 1: Work Information -->
+                    <div class="form-step active" id="formStep1">
+                        <h3>Work Information - Step 1 of 3</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Work Code:</label>
+                                <input type="text" id="workcode" value="WRK123456" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Title:</label>
+                                <input type="text" id="title" placeholder="Song title" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Catalog No:</label>
+                                <input type="text" id="catalogNo" placeholder="Catalog number">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Primary Artist:</label>
+                                <input type="text" id="primaryArtist" placeholder="Primary artist name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Featured Artist:</label>
+                                <input type="text" id="featuredArtist" placeholder="Featured artist (optional)">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ISRC:</label>
+                                <input type="text" id="isrc" placeholder="USRC17607839">
+                            </div>
+                            <div class="form-group">
+                                <label>Duration:</label>
+                                <input type="text" id="duration" placeholder="03:45">
+                            </div>
+                            <div class="form-group">
+                                <label>Release Date:</label>
+                                <input type="date" id="releaseDate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Session Info & Files -->
+                    <div class="form-step" id="formStep2">
+                        <h3>Session Info, Files & Lyrics - Step 2 of 3</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Recording Location:</label>
+                                <input type="text" id="recordingLocation" placeholder="Studio name or location">
+                            </div>
+                            <div class="form-group">
+                                <label>Key:</label>
+                                <input type="text" id="key" placeholder="C Major, A Minor, etc.">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>BPM:</label>
+                                <input type="number" id="bpm" placeholder="120">
+                            </div>
+                            <div class="form-group">
+                                <label>Language:</label>
+                                <select id="language">
+                                    <option value="EN">English</option>
+                                    <option value="ES">Spanish</option>
+                                    <option value="FR">French</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Music File:</label>
+                            <input type="file" id="musicFile" accept="audio/*">
+                        </div>
+                        <div class="form-group">
+                            <label>Artwork:</label>
+                            <input type="file" id="artworkFile" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="aiGenerated"> This content contains AI-generated material
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="containsSamples"> This content contains samples from other works
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>Lyrics:</label>
+                            <textarea id="lyrics" placeholder="Enter song lyrics here..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Rights & Credits -->
+                    <div class="form-step" id="formStep3">
+                        <h3>Rights & Credits - Step 3 of 3</h3>
+                        
+                        <!-- Songwriters -->
+                        <div class="dynamic-section">
+                            <div class="section-header">
+                                <h4>Songwriters</h4>
+                                <button type="button" class="btn" onclick="addSongwriter()">+ Add</button>
+                            </div>
+                            <div id="songwritersContainer">
+                                <div class="dynamic-entry">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Name:</label>
+                                            <input type="text" placeholder="Songwriter name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Split %:</label>
+                                            <input type="number" placeholder="50" min="0" max="100">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Publishers -->
+                        <div class="dynamic-section">
+                            <div class="section-header">
+                                <h4>Publishers</h4>
+                                <button type="button" class="btn" onclick="addPublisher()">+ Add</button>
+                            </div>
+                            <div id="publishersContainer">
+                                <div class="dynamic-entry">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Name:</label>
+                                            <input type="text" placeholder="Publisher name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Split %:</label>
+                                            <input type="number" placeholder="50" min="0" max="100">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Territory:</label>
+                                            <select>
+                                                <option value="WW">Worldwide</option>
+                                                <option value="US">United States</option>
+                                                <option value="EU">Europe</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-secondary" id="prevBtn" onclick="previousStep()" style="display: none;">Previous</button>
+                        <button type="button" class="btn" id="nextBtn" onclick="nextStep()">Next</button>
+                        <button type="submit" class="btn" id="submitBtn" style="display: none;">Submit Registration</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="eula.html">EULA</a>
+                    <a href="terms.html">Terms of Usage</a>
+                </div>
+                <div class="social-media">
+                    <a href="#" class="social-icon">📘</a>
+                    <a href="#" class="social-icon">🐦</a>
+                    <a href="#" class="social-icon">📷</a>
+                    <a href="#" class="social-icon">🎵</a>
+                </div>
+            </div>
+            <p>&copy; 2024 Music Engine. Powered by Boserena Studio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentStep = 1;
+
+        function nextStep() {
+            if (currentStep < 3) {
+                document.getElementById(`formStep${currentStep}`).classList.remove('active');
+                document.getElementById(`step${currentStep}`).classList.add('completed');
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                
+                currentStep++;
+                
+                document.getElementById(`formStep${currentStep}`).classList.add('active');
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                
+                updateButtons();
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                document.getElementById(`formStep${currentStep}`).classList.remove('active');
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                
+                currentStep--;
+                
+                document.getElementById(`formStep${currentStep}`).classList.add('active');
+                document.getElementById(`step${currentStep}`).classList.add('completed');
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                
+                updateButtons();
+            }
+        }
+
+        function updateButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+
+            prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
+            nextBtn.style.display = currentStep < 3 ? 'block' : 'none';
+            submitBtn.style.display = currentStep === 3 ? 'block' : 'none';
+        }
+
+        function addSongwriter() {
+            const container = document.getElementById('songwritersContainer');
+            const newEntry = document.createElement('div');
+            newEntry.className = 'dynamic-entry';
+            newEntry.innerHTML = `
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" placeholder="Songwriter name">
+                    </div>
+                    <div class="form-group">
+                        <label>Split %:</label>
+                        <input type="number" placeholder="50" min="0" max="100">
+                    </div>
+                </div>
+            `;
+            container.appendChild(newEntry);
+        }
+
+        function addPublisher() {
+            const container = document.getElementById('publishersContainer');
+            const newEntry = document.createElement('div');
+            newEntry.className = 'dynamic-entry';
+            newEntry.innerHTML = `
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" placeholder="Publisher name">
+                    </div>
+                    <div class="form-group">
+                        <label>Split %:</label>
+                        <input type="number" placeholder="50" min="0" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label>Territory:</label>
+                        <select>
+                            <option value="WW">Worldwide</option>
+                            <option value="US">United States</option>
+                            <option value="EU">Europe</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newEntry);
+        }
+
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Music registration submitted successfully!');
+        });
+    </script>
+</body>
+</html>
