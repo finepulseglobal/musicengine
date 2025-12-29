@@ -157,7 +157,7 @@ export default function RegisterScreen({ navigation }) {
       };
 
       // Submit to Google Apps Script
-      const response = await fetch('https://script.google.com/macros/s/AKfycbxYOUR_SCRIPT_ID/exec', {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbxlhI-EEnfZcTAG7jzBEsk5-ggT9SecFttAzmmpXXQgpMyleyHmvT9xWOblCetPtLn9/exec', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
