@@ -1,43 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Music Engine - Copyright Management Platform</title>
+    <title>Music Engine - Music is the weapon of intellectual</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial, sans-serif; line-height: 1.6; }
         
         /* Navigation */
-        .navbar { background: #007cba; color: white; padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
+        .navbar { background: rgba(0, 124, 186, 0.9); color: white; padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
         .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
         .logo { font-size: 1.5rem; font-weight: bold; }
         .nav-links { display: flex; list-style: none; gap: 2rem; }
         .nav-links a { color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.3s; }
         .nav-links a:hover { background: rgba(255,255,255,0.1); }
-        .login-btn { background: #28a745; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; color: white; }
+        .login-section { display: flex; align-items: center; gap: 1rem; }
+        .login-btn { background: #28a745; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; color: white; cursor: pointer; border: none; }
+        .profile-btn { background: #007cba; padding: 0.5rem 1rem; border-radius: 4px; text-decoration: none; color: white; display: none; }
         
         /* Hero Section */
-        .hero { background: linear-gradient(135deg, #007cba, #005a87); color: white; padding: 4rem 0; text-align: center; }
-        .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
-        .hero p { font-size: 1.2rem; margin-bottom: 2rem; }
-        
-        /* Features */
-        .features { padding: 4rem 0; max-width: 1200px; margin: 0 auto; }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; padding: 0 20px; }
-        .feature-box { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 2rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s; }
-        .feature-box:hover { transform: translateY(-5px); }
-        .feature-box h3 { color: #007cba; margin-bottom: 1rem; font-size: 1.5rem; }
-        .feature-box p { margin-bottom: 1.5rem; color: #666; }
-        .feature-btn { background: #007cba; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; text-decoration: none; display: inline-block; transition: background 0.3s; }
-        .feature-btn:hover { background: #005a87; }
+        .hero { 
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover; 
+            background-position: center; 
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+            color: white; 
+        }
+        .hero-content h1 { font-size: 4rem; margin-bottom: 2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+        .hero-content .cta-btn { background: #007cba; color: white; padding: 1rem 2rem; font-size: 1.2rem; border: none; border-radius: 4px; text-decoration: none; display: inline-block; margin-top: 2rem; transition: background 0.3s; }
+        .hero-content .cta-btn:hover { background: #005a87; }
         
         /* Footer */
-        .footer { background: #333; color: white; padding: 2rem 0; margin-top: 4rem; }
+        .footer { background: #333; color: white; padding: 2rem 0; position: fixed; bottom: 0; width: 100%; }
         .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 20px; }
         .footer-left a, .footer-right a { color: #ccc; text-decoration: none; margin: 0 1rem; }
         .footer-left a:hover, .footer-right a:hover { color: white; }
         .footer-center { text-align: center; color: #ccc; }
         .social-icons { display: flex; gap: 1rem; justify-content: flex-end; }
         .social-icons a { color: #ccc; font-size: 1.2rem; }
+        
+        /* QR Modal */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: white; margin: 10% auto; padding: 20px; border-radius: 8px; width: 300px; text-align: center; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: black; }
+        
+        /* Profile Form */
+        .profile-form { max-width: 800px; margin: 2rem auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .form-section { margin-bottom: 2rem; }
+        .form-section h3 { color: #007cba; margin-bottom: 1rem; border-bottom: 2px solid #007cba; padding-bottom: 0.5rem; }
+        .form-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        .form-group { flex: 1; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        .team-entry { border: 1px solid #eee; padding: 15px; margin: 10px 0; border-radius: 4px; }
+        .add-btn { background: #28a745; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; }
+        .remove-btn { background: #dc3545; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; float: right; }
+        .save-btn { background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -46,51 +68,189 @@
         <div class="nav-container">
             <div class="logo">Music Engine</div>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#governance">Governance</a></li>
-                <li><a href="#about">About</a></li>
+                <li><a href="main.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="governance.html">Governance</a></li>
+                <li><a href="about.html">About</a></li>
             </ul>
-            <a href="#login" class="login-btn">Login</a>
+            <div class="login-section">
+                <button class="login-btn" onclick="showQRLogin()">Login/Register</button>
+                <a href="#profile" class="profile-btn" id="profileBtn" onclick="showProfile()">Profile</a>
+            </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="container">
-            <h1>Music Copyright Management Platform</h1>
-            <p>Streamline your music rights, royalties, and legal agreements in one powerful platform</p>
+        <div class="hero-content">
+            <h1>Music is the weapon of intellectual</h1>
+            <a href="main.html" class="cta-btn">Enter Platform</a>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features" id="services">
-        <div class="features-grid">
-            <div class="feature-box">
-                <h3>Music Registration</h3>
-                <p>Complete copyright registration with CWR 2.0 support, metadata management, and blockchain integration.</p>
-                <a href="register.html" class="feature-btn">Register Music</a>
-            </div>
+    <!-- Profile Section -->
+    <div id="profileSection" style="display: none; padding: 2rem 0; background: #f8f9fa;">
+        <div class="profile-form">
+            <h2>Artist Profile</h2>
             
-            <div class="feature-box">
-                <h3>Copyright Portal</h3>
-                <p>Comprehensive copyright management dashboard with international compliance and rights tracking.</p>
-                <a href="copyright.html" class="feature-btn">Access Portal</a>
+            <!-- Basic Information -->
+            <div class="form-section">
+                <h3>Basic Information</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Legal Name:</label>
+                        <input type="text" id="legalName">
+                    </div>
+                    <div class="form-group">
+                        <label>Stage Name:</label>
+                        <input type="text" id="stageName">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="email">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone:</label>
+                        <input type="tel" id="phone">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Address:</label>
+                    <input type="text" id="address">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>IPI Number:</label>
+                        <input type="text" id="ipiNumber">
+                    </div>
+                    <div class="form-group">
+                        <label>ISNI Number:</label>
+                        <input type="text" id="isniNumber">
+                    </div>
+                </div>
             </div>
-            
-            <div class="feature-box">
-                <h3>Split & Royalty</h3>
-                <p>Automated royalty distribution, split calculations, and transparent payment processing.</p>
-                <a href="royalty.html" class="feature-btn">Manage Royalties</a>
+
+            <!-- Social Media Links -->
+            <div class="form-section">
+                <h3>Social Media & Streaming Links</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Spotify:</label>
+                        <input type="url" id="spotify">
+                    </div>
+                    <div class="form-group">
+                        <label>Apple Music:</label>
+                        <input type="url" id="appleMusic">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>YouTube:</label>
+                        <input type="url" id="youtube">
+                    </div>
+                    <div class="form-group">
+                        <label>Instagram:</label>
+                        <input type="url" id="instagram">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>TikTok:</label>
+                        <input type="url" id="tiktok">
+                    </div>
+                    <div class="form-group">
+                        <label>Facebook:</label>
+                        <input type="url" id="facebook">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Audiomack:</label>
+                        <input type="url" id="audiomack">
+                    </div>
+                    <div class="form-group">
+                        <label>Boomplay:</label>
+                        <input type="url" id="boomplay">
+                    </div>
+                </div>
             </div>
-            
-            <div class="feature-box">
-                <h3>Legal Agreements</h3>
-                <p>Smart contract templates, licensing agreements, and automated legal document generation.</p>
-                <a href="agreement.html" class="feature-btn">View Agreements</a>
+
+            <!-- Production Team -->
+            <div class="form-section">
+                <h3>Production Team <button type="button" class="add-btn" onclick="addTeamMember('production')">+</button></h3>
+                <div id="productionTeam">
+                    <div class="team-entry">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Name:</label>
+                                <input type="text" class="team-name">
+                            </div>
+                            <div class="form-group">
+                                <label>IPI:</label>
+                                <input type="text" class="team-ipi">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ISNI:</label>
+                                <input type="text" class="team-isni">
+                            </div>
+                            <div class="form-group">
+                                <label>Location:</label>
+                                <input type="text" class="team-location">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- A&R Team -->
+            <div class="form-section">
+                <h3>A&R Team <button type="button" class="add-btn" onclick="addTeamMember('ar')">+</button></h3>
+                <div id="arTeam">
+                    <div class="team-entry">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Name:</label>
+                                <input type="text" class="team-name">
+                            </div>
+                            <div class="form-group">
+                                <label>IPI:</label>
+                                <input type="text" class="team-ipi">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ISNI:</label>
+                                <input type="text" class="team-isni">
+                            </div>
+                            <div class="form-group">
+                                <label>Location:</label>
+                                <input type="text" class="team-location">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="save-btn" onclick="saveProfile()">Save Profile</button>
         </div>
-    </section>
+    </div>
+
+    <!-- QR Login Modal -->
+    <div id="qrModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeQRModal()">&times;</span>
+            <h3>Scan QR Code</h3>
+            <div style="width: 200px; height: 200px; background: #f0f0f0; margin: 20px auto; display: flex; align-items: center; justify-content: center; border: 2px dashed #ccc;">
+                QR Code Here
+            </div>
+            <p>Scan with your mobile device to login/register</p>
+            <button onclick="simulateLogin()" style="margin-top: 10px; padding: 10px 20px; background: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer;">Simulate Login</button>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -114,5 +274,76 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        let isLoggedIn = false;
+
+        function showQRLogin() {
+            document.getElementById('qrModal').style.display = 'block';
+        }
+
+        function closeQRModal() {
+            document.getElementById('qrModal').style.display = 'none';
+        }
+
+        function simulateLogin() {
+            isLoggedIn = true;
+            document.querySelector('.login-btn').style.display = 'none';
+            document.getElementById('profileBtn').style.display = 'block';
+            closeQRModal();
+            alert('Login successful!');
+        }
+
+        function showProfile() {
+            document.getElementById('profileSection').style.display = 'block';
+            document.querySelector('.hero').style.display = 'none';
+        }
+
+        function addTeamMember(type) {
+            const container = document.getElementById(type === 'production' ? 'productionTeam' : 'arTeam');
+            const div = document.createElement('div');
+            div.className = 'team-entry';
+            div.innerHTML = `
+                <button type="button" class="remove-btn" onclick="removeTeamMember(this)">Remove</button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" class="team-name">
+                    </div>
+                    <div class="form-group">
+                        <label>IPI:</label>
+                        <input type="text" class="team-ipi">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ISNI:</label>
+                        <input type="text" class="team-isni">
+                    </div>
+                    <div class="form-group">
+                        <label>Location:</label>
+                        <input type="text" class="team-location">
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeTeamMember(button) {
+            button.closest('.team-entry').remove();
+        }
+
+        function saveProfile() {
+            alert('Profile saved successfully!');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('qrModal');
+            if (event.target == modal) {
+                closeQRModal();
+            }
+        }
+    </script>
 </body>
 </html>

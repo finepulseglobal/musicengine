@@ -24,9 +24,31 @@
         .social-icons { display: flex; gap: 1rem; justify-content: flex-end; }
         .social-icons a { color: #ccc; font-size: 1.2rem; }
         
-        .content { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .content { max-width: 1200px; margin: 0 auto; padding: 20px; }
         .header { text-align: center; margin-bottom: 2rem; }
         .back-btn { background: #007cba; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; }
+        
+        /* Features Grid */
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .feature-box { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 2rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .feature-box:hover { transform: translateY(-5px); }
+        .feature-box h3 { color: #007cba; margin-bottom: 1rem; font-size: 1.5rem; }
+        .feature-box p { margin-bottom: 1.5rem; color: #666; }
+        .feature-btn { background: #007cba; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; transition: background 0.3s; }
+        .feature-btn:hover { background: #005a87; }
+        
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: white; margin: 5% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 600px; max-height: 80vh; overflow-y: auto; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: black; }
+        .form-group { margin: 15px 0; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        .add-btn { background: #28a745; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px; }
+        .remove-btn { background: #dc3545; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px; }
+        .producer-entry { border: 1px solid #eee; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .download-btn { background: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -36,9 +58,9 @@
             <div class="logo">Music Engine</div>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#governance">Governance</a></li>
-                <li><a href="#about">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="governance.html">Governance</a></li>
+                <li><a href="about.html">About</a></li>
             </ul>
             <a href="#login" class="login-btn">Login</a>
         </div>
@@ -51,9 +73,31 @@
         <a href="index.html" class="back-btn">← Back to Home</a>
     </div>
     
-    <div style="text-align: center; margin-top: 4rem;">
-        <h2>Coming Soon</h2>
-        <p>The Legal Agreements system is under development and will be available soon.</p>
+    <!-- Agreement Types -->
+    <div class="features-grid">
+        <div class="feature-box">
+            <h3>Production Agreement</h3>
+            <p>Agreement between artist and producer for music production services.</p>
+            <button class="feature-btn" onclick="openAgreementForm('production')">Generate Agreement</button>
+        </div>
+        
+        <div class="feature-box">
+            <h3>Catalog Transfer Agreement</h3>
+            <p>Transfer ownership of music catalog from one party to another.</p>
+            <button class="feature-btn" onclick="openAgreementForm('catalog')">Generate Agreement</button>
+        </div>
+        
+        <div class="feature-box">
+            <h3>Sampling License</h3>
+            <p>License agreement for using samples from existing musical works.</p>
+            <button class="feature-btn" onclick="openAgreementForm('sampling')">Generate Agreement</button>
+        </div>
+        
+        <div class="feature-box">
+            <h3>Publishing Agreement</h3>
+            <p>Agreement between songwriter and publisher for music publishing rights.</p>
+            <button class="feature-btn" onclick="openAgreementForm('publishing')">Generate Agreement</button>
+        </div>
     </div>
     </div>
 
@@ -79,5 +123,175 @@
             </div>
         </div>
     </footer>
+
+    <!-- Modal Forms -->
+    <div id="agreementModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let producerCount = 1;
+
+        function openAgreementForm(type) {
+            const modal = document.getElementById('agreementModal');
+            const content = document.getElementById('modalContent');
+            
+            let formHTML = '';
+            
+            switch(type) {
+                case 'production':
+                    formHTML = `
+                        <h2>Production Agreement</h2>
+                        <form id="productionForm">
+                            <div class="form-group">
+                                <label>Your Name:</label>
+                                <input type="text" id="artistName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>IPI Number:</label>
+                                <input type="text" id="artistIPI" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Your Address:</label>
+                                <textarea id="artistAddress" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Split Percentage:</label>
+                                <input type="number" id="splitPercent" min="0" max="100" required>
+                            </div>
+                            <div id="producersContainer">
+                                <h3>Producers <button type="button" class="add-btn" onclick="addProducer()">+</button></h3>
+                                <div class="producer-entry">
+                                    <div class="form-group">
+                                        <label>Producer Name:</label>
+                                        <input type="text" class="producer-name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Producer Address:</label>
+                                        <textarea class="producer-address" rows="2" required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="download-btn" onclick="downloadAgreement('production')">Download Agreement</button>
+                        </form>
+                    `;
+                    break;
+                    
+                case 'catalog':
+                    formHTML = `
+                        <h2>Catalog Transfer Agreement</h2>
+                        <form id="catalogForm">
+                            <div class="form-group">
+                                <label>New Receiver Name:</label>
+                                <input type="text" id="receiverName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>IPI Number:</label>
+                                <input type="text" id="receiverIPI" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Location:</label>
+                                <input type="text" id="receiverLocation" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Cost of Acquisition:</label>
+                                <input type="number" id="acquisitionCost" step="0.01" required>
+                            </div>
+                            <button type="button" class="download-btn" onclick="downloadAgreement('catalog')">Download Agreement</button>
+                        </form>
+                    `;
+                    break;
+                    
+                case 'sampling':
+                    formHTML = `
+                        <h2>Sampling License Agreement</h2>
+                        <form id="samplingForm">
+                            <div class="form-group">
+                                <label>Original Music ISRC:</label>
+                                <input type="text" id="originalISRC" required>
+                            </div>
+                            <div class="form-group">
+                                <label>New Music ISRC:</label>
+                                <input type="text" id="newISRC" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Performer Name:</label>
+                                <input type="text" id="performerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Release Name:</label>
+                                <input type="text" id="releaseName" required>
+                            </div>
+                            <button type="button" class="download-btn" onclick="downloadAgreement('sampling')">Download Agreement</button>
+                        </form>
+                    `;
+                    break;
+                    
+                case 'publishing':
+                    formHTML = `
+                        <h2>Publishing Agreement</h2>
+                        <form id="publishingForm">
+                            <div class="form-group">
+                                <label>Songwriter Name:</label>
+                                <input type="text" id="songwriterName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>IPI Number:</label>
+                                <input type="text" id="songwriterIPI" required>
+                            </div>
+                            <button type="button" class="download-btn" onclick="downloadAgreement('publishing')">Download Agreement</button>
+                        </form>
+                    `;
+                    break;
+            }
+            
+            content.innerHTML = formHTML;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('agreementModal').style.display = 'none';
+        }
+
+        function addProducer() {
+            producerCount++;
+            const container = document.getElementById('producersContainer');
+            const div = document.createElement('div');
+            div.className = 'producer-entry';
+            div.innerHTML = `
+                <button type="button" class="remove-btn" onclick="removeProducer(this)" style="float: right;">Remove</button>
+                <div class="form-group">
+                    <label>Producer Name:</label>
+                    <input type="text" class="producer-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Producer Address:</label>
+                    <textarea class="producer-address" rows="2" required></textarea>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeProducer(button) {
+            button.closest('.producer-entry').remove();
+        }
+
+        function downloadAgreement(type) {
+            // Collect form data and generate agreement
+            alert(`${type.charAt(0).toUpperCase() + type.slice(1)} agreement will be generated and downloaded.`);
+            closeModal();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('agreementModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
 </body>
 </html>
