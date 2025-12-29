@@ -66,6 +66,29 @@
             </div>
             <button class="btn" onclick="generateQR()">Generate New QR Code</button>
             <p class="qr-status" id="qrStatus">Waiting for scan...</p>
+            
+            <div class="login-help">
+                <p><small>Having trouble with QR code?</small></p>
+                <button class="btn btn-secondary" onclick="showPasswordResetRequest()">Request Access Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Reset Request Modal -->
+    <div id="passwordResetRequestModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePasswordResetRequest()">&times;</span>
+            <h2>🔑 Request Access Reset</h2>
+            <p>Enter your email to receive an access reset link</p>
+            
+            <form id="userPasswordResetForm">
+                <div class="form-group">
+                    <input type="email" id="userResetEmail" placeholder="Your email address" required>
+                </div>
+                <button type="submit" class="btn">Send Reset Link</button>
+            </form>
+            
+            <div id="userResetResult" style="margin-top: 1rem;"></div>
         </div>
     </div>
 </body>

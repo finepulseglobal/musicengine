@@ -152,7 +152,58 @@ function handleSuccessfulAuth(userData) {
 // Close modal when clicking outside
 window.onclick = function(event) {
     const modal = document.getElementById('loginModal');
+    const resetModal = document.getElementById('passwordResetRequestModal');
     if (event.target == modal) {
         closeLoginModal();
     }
+    if (event.target == resetModal) {
+        closePasswordResetRequest();
+    }
 }
+
+// Password Reset Request Functions
+function showPasswordResetRequest() {
+    document.getElementById('passwordResetRequestModal').style.display = 'block';
+}
+
+function closePasswordResetRequest() {
+    document.getElementById('passwordResetRequestModal').style.display = 'none';
+    document.getElementById('userResetResult').innerHTML = '';
+}
+
+// User Password Reset Form Handler
+document.addEventListener('DOMContentLoaded', function() {
+    const userResetForm = document.getElementById('userPasswordResetForm');
+    if (userResetForm) {
+        userResetForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('userResetEmail').value;
+            const resultDiv = document.getElementById('userResetResult');
+            
+            try {
+                const response = await fetch('/api/password-reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div style="color: #28a745; background: #d4edda; padding: 1rem; border-radius: 4px; border: 1px solid #c3e6cb;">
+                            <p>✅ Access reset link sent to your email!</p>
+                            <p><small>Check your email and follow the instructions to reset your access.</small></p>
+                        </div>
+                    `;
+                    document.getElementById('userPasswordResetForm').reset();
+                } else {
+                    resultDiv.innerHTML = `<p style="color: #dc3545;">❌ ${result.error}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<p style="color: #dc3545;">❌ Error sending reset link. Please try again.</p>';
+            }
+        });
+    }
+});

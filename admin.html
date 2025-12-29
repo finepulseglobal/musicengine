@@ -46,7 +46,13 @@
                 <div class="admin-card">
                     <h3>User Management</h3>
                     <p>Manage user accounts, subscriptions, and permissions</p>
-                    <button class="btn">Manage Users</button>
+                    <button class="btn" onclick="showUserManagement()">Manage Users</button>
+                </div>
+                
+                <div class="admin-card">
+                    <h3>Password Reset</h3>
+                    <p>Send password reset links to users having QR code issues</p>
+                    <button class="btn" onclick="showPasswordReset()">Reset User Access</button>
                 </div>
                 
                 <div class="admin-card">
@@ -71,12 +77,6 @@
                     <h3>Analytics</h3>
                     <p>View detailed analytics and performance metrics</p>
                     <button class="btn">View Analytics</button>
-                </div>
-                
-                <div class="admin-card">
-                    <h3>Support Tickets</h3>
-                    <p>Manage customer support requests and issues</p>
-                    <button class="btn">Support Queue</button>
                 </div>
             </div>
 
@@ -104,6 +104,69 @@
         </div>
     </div>
 
+    <!-- User Management Modal -->
+    <div id="userManagementModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="close" onclick="closeUserManagement()">&times;</span>
+            <h2>👥 User Management</h2>
+            
+            <div class="user-actions">
+                <button class="btn" onclick="showCreateUser()">Create New User</button>
+                <button class="btn btn-secondary" onclick="loadUsers()">Refresh Users</button>
+            </div>
+            
+            <div id="usersList" class="users-list">
+                <p>Loading users...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create User Modal -->
+    <div id="createUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCreateUser()">&times;</span>
+            <h2>➕ Create New User</h2>
+            
+            <form id="createUserForm">
+                <div class="form-group">
+                    <label>Artist Name:</label>
+                    <input type="text" id="newUserName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="newUserEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Plan:</label>
+                    <select id="newUserPlan">
+                        <option value="Creator">Creator ($99/year)</option>
+                        <option value="Record Label">Record Label ($999/year)</option>
+                        <option value="Media House">Media House ($2000/year)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Create User</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Password Reset Modal -->
+    <div id="passwordResetModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePasswordReset()">&times;</span>
+            <h2>🔑 Send Password Reset</h2>
+            
+            <form id="passwordResetForm">
+                <div class="form-group">
+                    <label>User Email:</label>
+                    <input type="email" id="resetEmail" required>
+                </div>
+                <button type="submit" class="btn">Send Reset Link</button>
+            </form>
+            
+            <div id="resetResult" style="margin-top: 1rem;"></div>
+        </div>
+    </div>
+
     <script>
         // Check admin authentication
         function checkAdminAuth() {
@@ -122,6 +185,161 @@
 
         // Initialize admin check
         document.addEventListener('DOMContentLoaded', checkAdminAuth);
+
+        // User Management Functions
+        function showUserManagement() {
+            document.getElementById('userManagementModal').style.display = 'block';
+            loadUsers();
+        }
+
+        function closeUserManagement() {
+            document.getElementById('userManagementModal').style.display = 'none';
+        }
+
+        function showCreateUser() {
+            document.getElementById('createUserModal').style.display = 'block';
+        }
+
+        function closeCreateUser() {
+            document.getElementById('createUserModal').style.display = 'none';
+        }
+
+        function showPasswordReset() {
+            document.getElementById('passwordResetModal').style.display = 'block';
+        }
+
+        function closePasswordReset() {
+            document.getElementById('passwordResetModal').style.display = 'none';
+        }
+
+        async function loadUsers() {
+            try {
+                const response = await fetch('/api/users', {
+                    headers: { 'Authorization': 'Bearer admin_token' }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    displayUsers(data.users);
+                } else {
+                    document.getElementById('usersList').innerHTML = '<p class="error">Failed to load users</p>';
+                }
+            } catch (error) {
+                document.getElementById('usersList').innerHTML = '<p class="error">Error loading users</p>';
+            }
+        }
+
+        function displayUsers(users) {
+            const usersList = document.getElementById('usersList');
+            
+            if (users.length === 0) {
+                usersList.innerHTML = '<p>No users found</p>';
+                return;
+            }
+            
+            const usersHTML = users.map(user => `
+                <div class="user-item">
+                    <div class="user-info">
+                        <strong>${user.name}</strong><br>
+                        <span class="user-email">${user.email}</span><br>
+                        <span class="user-plan">${user.plan}</span> | 
+                        <span class="user-status status-${user.status}">${user.status}</span>
+                    </div>
+                    <div class="user-actions">
+                        <button class="btn-small" onclick="editUser('${user.id}')">Edit</button>
+                        <button class="btn-small btn-danger" onclick="deleteUser('${user.id}', '${user.name}')">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            usersList.innerHTML = usersHTML;
+        }
+
+        async function deleteUser(userId, userName) {
+            if (!confirm(`Are you sure you want to delete user: ${userName}?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/users?userId=${userId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer admin_token' }
+                });
+                
+                if (response.ok) {
+                    alert('User deleted successfully');
+                    loadUsers();
+                } else {
+                    alert('Failed to delete user');
+                }
+            } catch (error) {
+                alert('Error deleting user');
+            }
+        }
+
+        // Create User Form Handler
+        document.getElementById('createUserForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('newUserName').value;
+            const email = document.getElementById('newUserEmail').value;
+            const plan = document.getElementById('newUserPlan').value;
+            
+            try {
+                const response = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer admin_token'
+                    },
+                    body: JSON.stringify({ name, email, plan })
+                });
+                
+                if (response.ok) {
+                    alert('User created successfully');
+                    closeCreateUser();
+                    loadUsers();
+                    document.getElementById('createUserForm').reset();
+                } else {
+                    const error = await response.json();
+                    alert('Failed to create user: ' + error.error);
+                }
+            } catch (error) {
+                alert('Error creating user');
+            }
+        });
+
+        // Password Reset Form Handler
+        document.getElementById('passwordResetForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('resetEmail').value;
+            const resultDiv = document.getElementById('resetResult');
+            
+            try {
+                const response = await fetch('/api/password-reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <p>✅ Reset link sent successfully!</p>
+                            <p><strong>Reset Link:</strong> <a href="${result.resetLink}" target="_blank">${window.location.origin}${result.resetLink}</a></p>
+                            <p><em>Share this link with the user</em></p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<p class="error">❌ ${result.error}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<p class="error">❌ Error sending reset link</p>';
+            }
+        });
     </script>
 
     <style>
@@ -185,6 +403,67 @@
         .activity-text {
             flex: 1;
             margin-left: 1rem;
+        }
+        
+        .user-actions {
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-email {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .user-plan {
+            color: #007cba;
+            font-weight: bold;
+        }
+        
+        .status-active {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .btn-small {
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            font-size: 0.9rem;
+            background: #007cba;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        .success {
+            color: #28a745;
+            background: #d4edda;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            color: #dc3545;
         }
     </style>
 </body>
