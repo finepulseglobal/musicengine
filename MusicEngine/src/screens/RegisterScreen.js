@@ -103,13 +103,77 @@ export default function RegisterScreen({ navigation }) {
     }
   };
 
+  const validateForm = () => {
+    // Check required fields
+    if (!formData.title.trim()) {
+      Alert.alert('Validation Error', 'Title is required');
+      return false;
+    }
+    if (!formData.primaryArtist.trim()) {
+      Alert.alert('Validation Error', 'Primary Artist is required');
+      return false;
+    }
+    if (formData.songwriters.length === 0 || !formData.songwriters[0].name.trim()) {
+      Alert.alert('Validation Error', 'At least one songwriter is required');
+      return false;
+    }
+    return true;
+  };
+
   const submitForm = async () => {
+    // Validate form first
+    if (!validateForm()) {
+      return;
+    }
+
     try {
-      // Here you would submit to your API
-      Alert.alert('Success', 'Music registration submitted successfully!');
-      navigation.goBack();
+      // Prepare data for Google Sheets
+      const submissionData = {
+        workcode: formData.workcode,
+        title: formData.title,
+        catalog_no: formData.catalogNo,
+        primary_artist: formData.primaryArtist,
+        featured_artist: formData.featuredArtist,
+        isrc: formData.isrc,
+        duration: formData.duration,
+        release_date: formData.releaseDate,
+        release_type: formData.releaseType,
+        iswc: formData.iswc,
+        society: formData.society,
+        recording_location: formData.recordingLocation,
+        key: formData.key,
+        bpm: formData.bpm,
+        language: formData.language,
+        lyrics: formData.lyrics,
+        ai_generated: formData.aiGenerated,
+        contains_samples: formData.containsSamples,
+        songwriters: formData.songwriters,
+        publishers: formData.publishers,
+        administrators: formData.administrators,
+        producers: formData.producers,
+        music_file: formData.musicFile?.name || null,
+        artwork_file: formData.artworkFile?.name || null,
+        timestamp: new Date().toISOString()
+      };
+
+      // Submit to Google Apps Script
+      const response = await fetch('https://script.google.com/macros/s/AKfycbxYOUR_SCRIPT_ID/exec', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData)
+      });
+
+      if (response.ok) {
+        Alert.alert('Success', 'Music registration submitted successfully!');
+        navigation.goBack();
+      } else {
+        throw new Error('Submission failed');
+      }
     } catch (error) {
-      Alert.alert('Error', 'Failed to submit registration');
+      Alert.alert('Error', 'Failed to submit registration. Please try again.');
+      console.error('Submission error:', error);
     }
   };
 
