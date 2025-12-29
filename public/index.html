@@ -1,124 +1,301 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Copyright Management Tool</title>
+    <title>Copyright Registration Form</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        body { font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .form-section { margin: 30px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
         .form-group { margin: 15px 0; }
+        .form-row { display: flex; gap: 15px; }
+        .form-row .form-group { flex: 1; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, textarea, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
-        button { background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        input, textarea, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
         button:hover { background: #005a87; }
+        .add-btn { background: #28a745; font-size: 18px; width: 35px; height: 35px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; }
+        .remove-btn { background: #dc3545; }
         .result { margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 4px; }
         .error { background: #ffe6e6; color: #d00; }
         .success { background: #e6ffe6; color: #060; }
+        .dynamic-section { border: 1px solid #eee; padding: 15px; margin: 10px 0; border-radius: 4px; position: relative; }
+        .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        h1 { color: #333; text-align: center; }
+        h2 { color: #333; border-bottom: 2px solid #007cba; padding-bottom: 10px; }
     </style>
 </head>
 <body>
-    <h1>Copyright Management Tool</h1>
+    <h1>Copyright Registration Form</h1>
     
-    <h2>Register Copyright Work</h2>
-    <form id="workForm">
-        <div class="form-group">
-            <label>Title:</label>
-            <input type="text" id="title" required>
+    <form id="copyrightForm">
+        <!-- Work Information -->
+        <div class="form-section">
+            <h2>Work Information</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Work Code:</label>
+                    <input type="text" id="workcode" placeholder="Auto-generated">
+                </div>
+                <div class="form-group">
+                    <label>Title:</label>
+                    <input type="text" id="title" required>
+                </div>
+                <div class="form-group">
+                    <label>Catalog No:</label>
+                    <input type="text" id="catalog_no">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Primary Artist:</label>
+                    <input type="text" id="primary_artist" required>
+                </div>
+                <div class="form-group">
+                    <label>Featured Artist:</label>
+                    <input type="text" id="featured_artist">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>ISRC:</label>
+                    <input type="text" id="isrc" placeholder="USRC17607839">
+                </div>
+                <div class="form-group">
+                    <label>Duration (mm:ss):</label>
+                    <input type="text" id="duration" placeholder="03:45">
+                </div>
+                <div class="form-group">
+                    <label>Release Date:</label>
+                    <input type="date" id="release_date">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Release Type:</label>
+                    <select id="release_type">
+                        <option value="Single">Single</option>
+                        <option value="Album">Album</option>
+                        <option value="EP">EP</option>
+                        <option value="Compilation">Compilation</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>ISWC:</label>
+                    <input type="text" id="iswc" placeholder="T-123456789-0">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Territory:</label>
+                    <select id="territory" multiple>
+                        <option value="WW">Worldwide</option>
+                        <option value="US">United States</option>
+                        <option value="CA">Canada</option>
+                        <option value="GB">United Kingdom</option>
+                        <option value="DE">Germany</option>
+                        <option value="FR">France</option>
+                        <option value="JP">Japan</option>
+                        <option value="AU">Australia</option>
+                    </select>
+                    <small>Hold Ctrl/Cmd to select multiple</small>
+                </div>
+                <div class="form-group">
+                    <label>Society:</label>
+                    <input type="text" id="society" placeholder="ASCAP, BMI, SESAC, etc.">
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Creator Name:</label>
-            <input type="text" id="creator_name" required>
+
+        <!-- Songwriters Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <h2>Songwriters</h2>
+                <button type="button" class="add-btn" onclick="addSongwriter()" title="Add Songwriter">+</button>
+            </div>
+            <div id="songwriters-container">
+                <div class="dynamic-section songwriter-entry">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Songwriter Name:</label>
+                            <input type="text" class="songwriter-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Songwriter IPI:</label>
+                            <input type="text" class="songwriter-ipi" placeholder="12345678901">
+                        </div>
+                        <div class="form-group">
+                            <label>Songwriter ISNI:</label>
+                            <input type="text" class="songwriter-isni" placeholder="0000000000000000">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Work Type:</label>
-            <select id="work_type">
-                <option value="literary">Literary</option>
-                <option value="musical">Musical</option>
-                <option value="artistic">Artistic</option>
-                <option value="dramatic">Dramatic</option>
-            </select>
+
+        <!-- Publishers Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <h2>Publishers</h2>
+                <button type="button" class="add-btn" onclick="addPublisher()" title="Add Publisher">+</button>
+            </div>
+            <div id="publishers-container">
+                <div class="dynamic-section publisher-entry">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Publisher Name:</label>
+                            <input type="text" class="publisher-name">
+                        </div>
+                        <div class="form-group">
+                            <label>Publisher IPI:</label>
+                            <input type="text" class="publisher-ipi" placeholder="12345678901">
+                        </div>
+                        <div class="form-group">
+                            <label>Publisher ISNI:</label>
+                            <input type="text" class="publisher-isni" placeholder="0000000000000000">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label>ISWC (optional):</label>
-            <input type="text" id="iswc" placeholder="T-123456789-0">
+
+        <!-- Split Information -->
+        <div class="form-section">
+            <h2>Split Information</h2>
+            <div class="form-group">
+                <label>Split Info:</label>
+                <textarea id="split_info" rows="3" placeholder="Describe ownership splits and percentages"></textarea>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Description:</label>
-            <textarea id="description" rows="3"></textarea>
-        </div>
-        <button type="submit">Register Work</button>
-    </form>
-    
-    <h2>CWR Form Submission</h2>
-    <form id="cwrForm">
-        <div class="form-group">
-            <label>Work Title:</label>
-            <input type="text" id="cwr_title" required>
-        </div>
-        <div class="form-group">
-            <label>Creator First Name:</label>
-            <input type="text" id="cwr_first_name" required>
-        </div>
-        <div class="form-group">
-            <label>Creator Last Name:</label>
-            <input type="text" id="cwr_last_name" required>
-        </div>
-        <div class="form-group">
-            <label>Writer Share (%):</label>
-            <input type="number" id="writer_share" min="0" max="100" value="100">
-        </div>
-        <button type="submit">Submit CWR Form</button>
+
+        <button type="submit">Submit Registration</button>
     </form>
     
     <div id="result"></div>
 
     <script>
-        const API_BASE = window.location.origin;
-        
-        document.getElementById('workForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const data = {
-                title: document.getElementById('title').value,
-                creator_name: document.getElementById('creator_name').value,
-                work_type: document.getElementById('work_type').value,
-                iswc: document.getElementById('iswc').value,
-                description: document.getElementById('description').value
-            };
-            
-            try {
-                const response = await fetch(`${API_BASE}/api/works`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                
-                const result = await response.json();
-                showResult(result, response.ok);
-                
-            } catch (error) {
-                showResult({ error: error.message }, false);
-            }
+        let songwriterCount = 1;
+        let publisherCount = 1;
+
+        function addSongwriter() {
+            songwriterCount++;
+            const container = document.getElementById('songwriters-container');
+            const songwriterDiv = document.createElement('div');
+            songwriterDiv.className = 'dynamic-section songwriter-entry';
+            songwriterDiv.innerHTML = `
+                <button type="button" class="remove-btn" onclick="removeSongwriter(this)" style="float: right;">Remove</button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Songwriter Name:</label>
+                        <input type="text" class="songwriter-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Songwriter IPI:</label>
+                        <input type="text" class="songwriter-ipi" placeholder="12345678901">
+                    </div>
+                    <div class="form-group">
+                        <label>Songwriter ISNI:</label>
+                        <input type="text" class="songwriter-isni" placeholder="0000000000000000">
+                    </div>
+                </div>
+            `;
+            container.appendChild(songwriterDiv);
+        }
+
+        function addPublisher() {
+            publisherCount++;
+            const container = document.getElementById('publishers-container');
+            const publisherDiv = document.createElement('div');
+            publisherDiv.className = 'dynamic-section publisher-entry';
+            publisherDiv.innerHTML = `
+                <button type="button" class="remove-btn" onclick="removePublisher(this)" style="float: right;">Remove</button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Publisher Name:</label>
+                        <input type="text" class="publisher-name">
+                    </div>
+                    <div class="form-group">
+                        <label>Publisher IPI:</label>
+                        <input type="text" class="publisher-ipi" placeholder="12345678901">
+                    </div>
+                    <div class="form-group">
+                        <label>Publisher ISNI:</label>
+                        <input type="text" class="publisher-isni" placeholder="0000000000000000">
+                    </div>
+                </div>
+            `;
+            container.appendChild(publisherDiv);
+        }
+
+        function removeSongwriter(button) {
+            button.closest('.songwriter-entry').remove();
+        }
+
+        function removePublisher(button) {
+            button.closest('.publisher-entry').remove();
+        }
+
+        // Generate work code
+        function generateWorkCode() {
+            const prefix = 'WRK';
+            const timestamp = Date.now().toString().slice(-6);
+            return `${prefix}${timestamp}`;
+        }
+
+        // Set work code on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('workcode').value = generateWorkCode();
         });
-        
-        document.getElementById('cwrForm').addEventListener('submit', async (e) => {
+
+        document.getElementById('copyrightForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            // Collect songwriters
+            const songwriters = [];
+            document.querySelectorAll('.songwriter-entry').forEach(entry => {
+                songwriters.push({
+                    name: entry.querySelector('.songwriter-name').value,
+                    ipi: entry.querySelector('.songwriter-ipi').value,
+                    isni: entry.querySelector('.songwriter-isni').value
+                });
+            });
+
+            // Collect publishers
+            const publishers = [];
+            document.querySelectorAll('.publisher-entry').forEach(entry => {
+                publishers.push({
+                    name: entry.querySelector('.publisher-name').value,
+                    ipi: entry.querySelector('.publisher-ipi').value,
+                    isni: entry.querySelector('.publisher-isni').value
+                });
+            });
+
+            // Collect territories
+            const territories = Array.from(document.getElementById('territory').selectedOptions)
+                .map(option => option.value);
+
             const data = {
-                work_title: document.getElementById('cwr_title').value,
-                interested_parties: [{
-                    first_name: document.getElementById('cwr_first_name').value,
-                    last_name: document.getElementById('cwr_last_name').value,
-                    name: `${document.getElementById('cwr_first_name').value} ${document.getElementById('cwr_last_name').value}`
-                }],
-                work_credits: [{
-                    ip_number: "1",
-                    role_code: "C",
-                    writer_share: parseFloat(document.getElementById('writer_share').value),
-                    publisher_share: 0
-                }]
+                workcode: document.getElementById('workcode').value,
+                title: document.getElementById('title').value,
+                catalog_no: document.getElementById('catalog_no').value,
+                primary_artist: document.getElementById('primary_artist').value,
+                featured_artist: document.getElementById('featured_artist').value,
+                isrc: document.getElementById('isrc').value,
+                duration: document.getElementById('duration').value,
+                release_date: document.getElementById('release_date').value,
+                release_type: document.getElementById('release_type').value,
+                iswc: document.getElementById('iswc').value,
+                territory: territories.join(', '),
+                society: document.getElementById('society').value,
+                split_info: document.getElementById('split_info').value,
+                songwriters: songwriters,
+                publishers: publishers
             };
             
             try {
-                const response = await fetch(`${API_BASE}/api/cwr`, {
+                const response = await fetch(`${window.location.origin}/api/test`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
