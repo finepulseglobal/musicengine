@@ -1,47 +1,67 @@
-# Google Sheets Backend Setup - Updated
+# Google Sheets Integration Setup
 
-## Spreadsheet Column Headers
+## Step 1: Create Google Apps Script
 
-Add these exact headers to Row 1 of your Google Sheet:
+1. Go to [script.google.com](https://script.google.com)
+2. Click "New Project"
+3. Replace the default code with the content from `google-apps-script.js`
+4. Save the project (name it "Music Engine API")
 
-| A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Workcode | Title | Catalog No | Primary Artist | Featured Artist | ISRC | Duration | Release Date | Release Type | Songwriter | Songwriter IPI | Songwriter ISNI | Publisher Name | Publisher IPI | Publisher ISNI | Society | ISWC | Territory | Split Info | All Songwriters | All Publishers | Timestamp |
+## Step 2: Deploy as Web App
 
-## Setup Steps
+1. Click "Deploy" → "New deployment"
+2. Choose type: "Web app"
+3. Settings:
+   - Execute as: **Me**
+   - Who has access: **Anyone**
+4. Click "Deploy"
+5. Copy the Web App URL (looks like: `https://script.google.com/macros/s/AKfycby.../exec`)
 
-1. **Create Google Apps Script:**
-   - Go to [script.google.com](https://script.google.com)
-   - Create new project
-   - Replace code with `google-apps-script.js` content
-   - Save project
+## Step 3: Update React Native App
 
-2. **Deploy Web App:**
-   - Click Deploy > New deployment
-   - Type: Web app
-   - Execute as: Me
-   - Access: Anyone
-   - Deploy and copy URL
+1. Open `src/screens/RegisterScreen.js`
+2. Find line 33: `const response = await fetch('https://script.google.com/macros/s/AKfycbxYOUR_SCRIPT_ID/exec'`
+3. Replace `AKfycbxYOUR_SCRIPT_ID` with your actual script ID from the Web App URL
 
-3. **Update Form:**
-   - Replace `YOUR_SCRIPT_ID` in `index.html` with your script ID
-   - Script ID is in the URL: `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec`
+## Step 4: Prepare Google Sheet
 
-4. **Test:**
-   - Submit form entry
-   - Verify data appears in spreadsheet
+Your spreadsheet should have these columns (in order):
+1. Timestamp
+2. Work Code
+3. Title
+4. Catalog No
+5. Primary Artist
+6. Featured Artist
+7. ISRC
+8. Duration
+9. Release Date
+10. Release Type
+11. ISWC
+12. Society
+13. Recording Location
+14. Key
+15. BPM
+16. Language
+17. Lyrics
+18. AI Generated
+19. Contains Samples
+20. Songwriters
+21. Publishers
+22. Administrators
+23. Producers
+24. Music File
+25. Artwork File
 
-## Form Features
+## Step 5: Test the Integration
 
-- **Auto Work Code Generation** - Unique identifier for each work
-- **Multiple Songwriters** - Plus button to add more
-- **Multiple Publishers** - Plus button to add more  
-- **Territory Selection** - Multi-select dropdown
-- **Complete Data Capture** - All required copyright fields
-- **JSON Backup** - Full songwriter/publisher data in columns T & U
+1. Run your React Native app
+2. Fill out the registration form
+3. Submit the form
+4. Check your Google Sheet for the new row
 
-## Data Flow
+## Troubleshooting
 
-Form → Google Apps Script → Google Sheets
-
-The first songwriter/publisher appears in individual columns, with complete arrays stored as JSON for reference.
+- Make sure the Google Apps Script is deployed with "Anyone" access
+- Verify the Sheet ID in the script matches your spreadsheet
+- Check browser console for any CORS errors
+- Ensure all required form fields are filled

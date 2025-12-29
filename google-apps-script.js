@@ -1,15 +1,20 @@
 /**
- * Google Apps Script for Copyright Registration Backend
- * Deploy this as a web app to handle form submissions
+ * Google Apps Script for Music Engine Registration Form
+ * Deploy this as a web app and use the URL in the React Native app
  */
 
 function doPost(e) {
   try {
+    // Parse the JSON data
     const data = JSON.parse(e.postData.contents);
-    const sheet = SpreadsheetApp.openById('1vRM8-GFr8nMQljaZy5E3tNGiONeWttBFviebJBxEu4nY-_TtxaWEFS2I-eQq1-VZTuPTxsebpKv2KeN').getActiveSheet();
     
-    // Prepare row data matching spreadsheet columns
+    // Open the Google Sheet by ID (extract from your URL)
+    const SHEET_ID = '1vRM8-GFr8nMQljaZy5E3tNGiONeWttBFviebJBxEu4n'; // Extract from your URL
+    const sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+    
+    // Prepare row data matching your spreadsheet columns
     const rowData = [
+      new Date(), // Timestamp
       data.workcode || '',
       data.title || '',
       data.catalog_no || '',
@@ -19,36 +24,45 @@ function doPost(e) {
       data.duration || '',
       data.release_date || '',
       data.release_type || '',
-      // First songwriter
-      data.songwriters && data.songwriters[0] ? data.songwriters[0].name : '',
-      data.songwriters && data.songwriters[0] ? data.songwriters[0].ipi : '',
-      data.songwriters && data.songwriters[0] ? data.songwriters[0].isni : '',
-      // First publisher
-      data.publishers && data.publishers[0] ? data.publishers[0].name : '',
-      data.publishers && data.publishers[0] ? data.publishers[0].ipi : '',
-      data.publishers && data.publishers[0] ? data.publishers[0].isni : '',
-      data.society || '',
       data.iswc || '',
-      data.territory || '',
-      data.split_info || '',
-      // Additional data as JSON for multiple songwriters/publishers
-      JSON.stringify(data.songwriters || []),
-      JSON.stringify(data.publishers || []),
-      new Date() // Timestamp
+      data.society || '',
+      data.recording_location || '',
+      data.key || '',
+      data.bpm || '',
+      data.language || '',
+      data.lyrics || '',
+      data.ai_generated ? 'Yes' : 'No',
+      data.contains_samples ? 'Yes' : 'No',
+      
+      // Songwriters (flatten array to string)
+      data.songwriters ? data.songwriters.map(s => `${s.name} (${s.split}%)`).join(', ') : '',
+      
+      // Publishers (flatten array to string)
+      data.publishers ? data.publishers.map(p => `${p.name} (${p.split}%) - ${p.territory}`).join(', ') : '',
+      
+      // Administrators (flatten array to string)
+      data.administrators ? data.administrators.map(a => `${a.name} (${a.split}%) - ${a.territory}`).join(', ') : '',
+      
+      // Producers (flatten array to string)
+      data.producers ? data.producers.map(p => `${p.name} - ${p.role}`).join(', ') : '',
+      
+      data.music_file || '',
+      data.artwork_file || ''
     ];
     
-    // Add row to sheet
+    // Add the row to the sheet
     sheet.appendRow(rowData);
     
+    // Return success response
     return ContentService
       .createTextOutput(JSON.stringify({
         success: true,
-        message: 'Registration saved successfully',
-        work_id: data.workcode
+        message: 'Registration submitted successfully'
       }))
       .setMimeType(ContentService.MimeType.JSON);
       
   } catch (error) {
+    // Return error response
     return ContentService
       .createTextOutput(JSON.stringify({
         success: false,
@@ -59,10 +73,22 @@ function doPost(e) {
 }
 
 function doGet(e) {
+  // Handle GET requests (for testing)
   return ContentService
     .createTextOutput(JSON.stringify({
-      status: 'ok',
-      message: 'Copyright Registration API Ready'
+      message: 'Music Engine Registration API is running'
     }))
     .setMimeType(ContentService.MimeType.JSON);
 }
+
+/**
+ * Setup Instructions:
+ * 1. Go to script.google.com
+ * 2. Create a new project
+ * 3. Paste this code
+ * 4. Deploy as web app:
+ *    - Execute as: Me
+ *    - Who has access: Anyone
+ * 5. Copy the web app URL
+ * 6. Replace the URL in RegisterScreen.js
+ */
