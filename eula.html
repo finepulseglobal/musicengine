@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>End User License Agreement - Music Engine</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="login.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">Music Engine</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="governance.html">Governance</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="#" class="btn" onclick="openLoginModal()">Login/Signup</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- EULA Content -->
+    <div class="page-content">
+        <div class="container">
+            <h2 class="section-title">End User License Agreement (EULA)</h2>
+            <p style="text-align: center; margin-bottom: 2rem;">Last updated: December 2024</p>
+
+            <div class="legal-content">
+                <section>
+                    <h3>1. License Grant</h3>
+                    <p>Music Engine grants you a limited, non-exclusive, non-transferable license to use our platform for copyright management and music registration services, subject to the terms and conditions of this agreement.</p>
+                </section>
+
+                <section>
+                    <h3>2. Permitted Uses</h3>
+                    <p>You may use Music Engine to:</p>
+                    <ul>
+                        <li>Register and manage your original musical works</li>
+                        <li>Track copyright ownership and royalties</li>
+                        <li>Generate legal agreements and contracts</li>
+                        <li>Monitor for copyright infringement</li>
+                        <li>Access blockchain-based copyright records</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>3. Restrictions</h3>
+                    <p>You may not:</p>
+                    <ul>
+                        <li>Register works you do not own or have rights to</li>
+                        <li>Reverse engineer or attempt to extract source code</li>
+                        <li>Use the platform for illegal or fraudulent activities</li>
+                        <li>Share your account credentials with others</li>
+                        <li>Circumvent security measures or access controls</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>4. Intellectual Property</h3>
+                    <p>You retain all rights to your musical works. Music Engine retains all rights to the platform, software, and related intellectual property. The blockchain records created are immutable and serve as proof of registration.</p>
+                </section>
+
+                <section>
+                    <h3>5. Service Availability</h3>
+                    <p>We strive to maintain 99.9% uptime but do not guarantee uninterrupted service. We may perform maintenance, updates, or modifications that temporarily affect availability.</p>
+                </section>
+
+                <section>
+                    <h3>6. Limitation of Liability</h3>
+                    <p>Music Engine's liability is limited to the amount paid for services in the preceding 12 months. We are not liable for indirect, incidental, or consequential damages.</p>
+                </section>
+
+                <section>
+                    <h3>7. Termination</h3>
+                    <p>Either party may terminate this agreement at any time. Upon termination, your access to the platform will cease, but blockchain records remain immutable as proof of prior registrations.</p>
+                </section>
+
+                <section>
+                    <h3>8. Contact Information</h3>
+                    <p>For questions about this EULA, contact us at:</p>
+                    <p><strong>Email:</strong> legal@musicengine.com<br>
+                    <strong>Address:</strong> Music Engine Legal Department<br>
+                    Boserena Studio, Global Operations</p>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="eula.html">EULA</a>
+                    <a href="terms.html">Terms of Usage</a>
+                </div>
+                <div class="social-media">
+                    <a href="#" class="social-icon">📘</a>
+                    <a href="#" class="social-icon">🐦</a>
+                    <a href="#" class="social-icon">📷</a>
+                    <a href="#" class="social-icon">🎵</a>
+                </div>
+            </div>
+            <p>&copy; 2024 Music Engine. Powered by Boserena Studio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>🔐 QR Code Login</h2>
+            <p>Scan the QR code with your mobile device to login securely</p>
+            <div class="qr-container">
+                <canvas id="qrcode"></canvas>
+            </div>
+            <button class="btn" onclick="generateQR()">Generate New QR Code</button>
+            <p class="qr-status" id="qrStatus">Waiting for scan...</p>
+        </div>
+    </div>
+</body>
+</html>

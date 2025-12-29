@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Usage - Music Engine</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="login.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">Music Engine</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="governance.html">Governance</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="#" class="btn" onclick="openLoginModal()">Login/Signup</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Terms Content -->
+    <div class="page-content">
+        <div class="container">
+            <h2 class="section-title">Terms of Usage</h2>
+            <p style="text-align: center; margin-bottom: 2rem;">Last updated: December 2024</p>
+
+            <div class="legal-content">
+                <section>
+                    <h3>1. Acceptance of Terms</h3>
+                    <p>By accessing and using Music Engine, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.</p>
+                </section>
+
+                <section>
+                    <h3>2. Account Registration</h3>
+                    <p>To use our services, you must:</p>
+                    <ul>
+                        <li>Provide accurate and complete registration information</li>
+                        <li>Maintain the security of your account credentials</li>
+                        <li>Be at least 18 years old or have parental consent</li>
+                        <li>Comply with all applicable laws and regulations</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>3. Service Usage</h3>
+                    <p>Music Engine provides copyright management services including:</p>
+                    <ul>
+                        <li>Music registration and metadata management</li>
+                        <li>Royalty tracking and distribution</li>
+                        <li>Legal document generation</li>
+                        <li>Infringement monitoring</li>
+                        <li>Blockchain-based copyright records</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>4. User Responsibilities</h3>
+                    <p>You are responsible for:</p>
+                    <ul>
+                        <li>Ensuring you own or have rights to all submitted content</li>
+                        <li>Providing accurate metadata and ownership information</li>
+                        <li>Maintaining current contact and payment information</li>
+                        <li>Complying with copyright laws in your jurisdiction</li>
+                        <li>Reporting any unauthorized use of your account</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>5. Payment Terms</h3>
+                    <p>Subscription fees are billed annually in advance. Refunds are provided within 30 days of initial purchase. Price changes will be communicated 30 days in advance.</p>
+                </section>
+
+                <section>
+                    <h3>6. Prohibited Activities</h3>
+                    <p>You may not:</p>
+                    <ul>
+                        <li>Submit false or misleading information</li>
+                        <li>Attempt to circumvent security measures</li>
+                        <li>Use the service for illegal activities</li>
+                        <li>Interfere with other users' access to the service</li>
+                        <li>Violate any applicable laws or regulations</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>7. Service Modifications</h3>
+                    <p>We reserve the right to modify, suspend, or discontinue any part of our service with reasonable notice. We will provide at least 30 days notice for significant changes affecting your usage.</p>
+                </section>
+
+                <section>
+                    <h3>8. Dispute Resolution</h3>
+                    <p>Any disputes will be resolved through binding arbitration in accordance with our governance framework. The arbitration will be conducted in English and governed by international arbitration rules.</p>
+                </section>
+
+                <section>
+                    <h3>9. Governing Law</h3>
+                    <p>These terms are governed by international copyright law and the laws of the jurisdiction where Boserena Studio is incorporated.</p>
+                </section>
+
+                <section>
+                    <h3>10. Contact Information</h3>
+                    <p>For questions about these Terms of Usage, contact us at:</p>
+                    <p><strong>Email:</strong> terms@musicengine.com<br>
+                    <strong>Address:</strong> Music Engine Terms Department<br>
+                    Boserena Studio, Global Operations</p>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="eula.html">EULA</a>
+                    <a href="terms.html">Terms of Usage</a>
+                </div>
+                <div class="social-media">
+                    <a href="#" class="social-icon">📘</a>
+                    <a href="#" class="social-icon">🐦</a>
+                    <a href="#" class="social-icon">📷</a>
+                    <a href="#" class="social-icon">🎵</a>
+                </div>
+            </div>
+            <p>&copy; 2024 Music Engine. Powered by Boserena Studio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>🔐 QR Code Login</h2>
+            <p>Scan the QR code with your mobile device to login securely</p>
+            <div class="qr-container">
+                <canvas id="qrcode"></canvas>
+            </div>
+            <button class="btn" onclick="generateQR()">Generate New QR Code</button>
+            <p class="qr-status" id="qrStatus">Waiting for scan...</p>
+        </div>
+    </div>
+</body>
+</html>

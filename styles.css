@@ -192,6 +192,33 @@ footer { background: #333; color: white; padding: 2rem 0; }
     background: #28a745;
 }
 
+/* Legal Content */
+.legal-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.legal-content section {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.legal-content h3 {
+    color: #007cba;
+    margin-bottom: 1rem;
+}
+
+.legal-content ul {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+.legal-content li {
+    margin-bottom: 0.5rem;
+}
+
 /* Page Layout */
 .page-content { margin-top: 80px; min-height: calc(100vh - 200px); }
 
