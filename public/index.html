@@ -199,6 +199,19 @@
                 </div>
             </div>
             
+            <div class="form-row">
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="ai_generated"> This content contains AI-generated material
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="contains_samples"> This content contains samples from other works
+                    </label>
+                </div>
+            </div>
+            
             <!-- Lyrics -->
             <h3>Lyrics</h3>
             <div class="form-group">
@@ -603,6 +616,8 @@
                 bpm: document.getElementById('bpm').value,
                 language: document.getElementById('language').value,
                 lyrics: document.getElementById('lyrics').value,
+                ai_generated: document.getElementById('ai_generated').checked,
+                contains_samples: document.getElementById('contains_samples').checked,
                 songwriters: songwriters,
                 publishers: publishers,
                 administrators: administrators,
