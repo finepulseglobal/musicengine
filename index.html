@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Copyright Management Tool</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .form-group { margin: 15px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, textarea, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #005a87; }
+        .result { margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 4px; }
+        .error { background: #ffe6e6; color: #d00; }
+        .success { background: #e6ffe6; color: #060; }
+    </style>
+</head>
+<body>
+    <h1>Copyright Management Tool</h1>
+    
+    <h2>Register Copyright Work</h2>
+    <form id="workForm">
+        <div class="form-group">
+            <label>Title:</label>
+            <input type="text" id="title" required>
+        </div>
+        <div class="form-group">
+            <label>Creator Name:</label>
+            <input type="text" id="creator_name" required>
+        </div>
+        <div class="form-group">
+            <label>Work Type:</label>
+            <select id="work_type">
+                <option value="literary">Literary</option>
+                <option value="musical">Musical</option>
+                <option value="artistic">Artistic</option>
+                <option value="dramatic">Dramatic</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>ISWC (optional):</label>
+            <input type="text" id="iswc" placeholder="T-123456789-0">
+        </div>
+        <div class="form-group">
+            <label>Description:</label>
+            <textarea id="description" rows="3"></textarea>
+        </div>
+        <button type="submit">Register Work</button>
+    </form>
+    
+    <h2>CWR Form Submission</h2>
+    <form id="cwrForm">
+        <div class="form-group">
+            <label>Work Title:</label>
+            <input type="text" id="cwr_title" required>
+        </div>
+        <div class="form-group">
+            <label>Creator First Name:</label>
+            <input type="text" id="cwr_first_name" required>
+        </div>
+        <div class="form-group">
+            <label>Creator Last Name:</label>
+            <input type="text" id="cwr_last_name" required>
+        </div>
+        <div class="form-group">
+            <label>Writer Share (%):</label>
+            <input type="number" id="writer_share" min="0" max="100" value="100">
+        </div>
+        <button type="submit">Submit CWR Form</button>
+    </form>
+    
+    <div id="result"></div>
+
+    <script>
+        const API_BASE = window.location.origin;
+        
+        document.getElementById('workForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const data = {
+                title: document.getElementById('title').value,
+                creator_name: document.getElementById('creator_name').value,
+                work_type: document.getElementById('work_type').value,
+                iswc: document.getElementById('iswc').value,
+                description: document.getElementById('description').value
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/works`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                showResult(result, response.ok);
+                
+            } catch (error) {
+                showResult({ error: error.message }, false);
+            }
+        });
+        
+        document.getElementById('cwrForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const data = {
+                work_title: document.getElementById('cwr_title').value,
+                interested_parties: [{
+                    first_name: document.getElementById('cwr_first_name').value,
+                    last_name: document.getElementById('cwr_last_name').value,
+                    name: `${document.getElementById('cwr_first_name').value} ${document.getElementById('cwr_last_name').value}`
+                }],
+                work_credits: [{
+                    ip_number: "1",
+                    role_code: "C",
+                    writer_share: parseFloat(document.getElementById('writer_share').value),
+                    publisher_share: 0
+                }]
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/cwr`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                showResult(result, response.ok);
+                
+            } catch (error) {
+                showResult({ error: error.message }, false);
+            }
+        });
+        
+        function showResult(result, success) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = `result ${success ? 'success' : 'error'}`;
+            resultDiv.innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
+        }
+    </script>
+</body>
+</html>
