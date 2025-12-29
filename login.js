@@ -4,7 +4,19 @@ let pollInterval;
 
 function openLoginModal() {
     document.getElementById('loginModal').style.display = 'block';
-    generateQR();
+    // Wait for QRCode library to load
+    if (typeof QRCode !== 'undefined') {
+        generateQR();
+    } else {
+        setTimeout(() => {
+            if (typeof QRCode !== 'undefined') {
+                generateQR();
+            } else {
+                document.getElementById('qrStatus').textContent = 'QR Code library loading...';
+                setTimeout(generateQR, 1000);
+            }
+        }, 500);
+    }
 }
 
 function closeLoginModal() {
@@ -18,6 +30,15 @@ function generateQR() {
     const sessionId = 'ME_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     const qrData = `https://musicengine.com/mobile-auth?session=${sessionId}`;
     
+    if (typeof QRCode === 'undefined') {
+        document.getElementById('qrStatus').textContent = 'Loading QR Code...';
+        return;
+    }
+    
+    // Clear previous QR code
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
     QRCode.toCanvas(canvas, qrData, {
         width: 200,
         margin: 2,
@@ -27,7 +48,7 @@ function generateQR() {
         }
     }, function (error) {
         if (error) {
-            console.error(error);
+            console.error('QR Code Error:', error);
             document.getElementById('qrStatus').textContent = 'Error generating QR code';
         } else {
             qrCodeGenerated = true;

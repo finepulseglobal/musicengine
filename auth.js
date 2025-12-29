@@ -6,10 +6,16 @@ let currentUser = null;
 function checkAuth() {
     const authToken = localStorage.getItem('musicEngineAuth');
     const userData = localStorage.getItem('musicEngineUser');
+    const adminAuth = localStorage.getItem('musicEngineAdmin');
+    const adminUser = localStorage.getItem('adminUser');
     
     if (authToken && userData) {
         isAuthenticated = true;
         currentUser = JSON.parse(userData);
+        updateNavigation();
+    } else if (adminAuth === 'true' && adminUser) {
+        isAuthenticated = true;
+        currentUser = JSON.parse(adminUser);
         updateNavigation();
     } else {
         hideProfileLink();
@@ -54,6 +60,8 @@ function login(userData) {
 function logout() {
     localStorage.removeItem('musicEngineAuth');
     localStorage.removeItem('musicEngineUser');
+    localStorage.removeItem('musicEngineAdmin');
+    localStorage.removeItem('adminUser');
     
     isAuthenticated = false;
     currentUser = null;
@@ -70,7 +78,8 @@ function logout() {
 function protectProfilePage() {
     if (window.location.pathname.includes('profile.html')) {
         const authToken = localStorage.getItem('musicEngineAuth');
-        if (!authToken) {
+        const adminAuth = localStorage.getItem('musicEngineAdmin');
+        if (!authToken && adminAuth !== 'true') {
             alert('Please login to access your profile.');
             window.location.href = 'index.html';
         }
