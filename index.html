@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Engine - Copyright Management</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -16,7 +17,7 @@
                 <li><a href="services.html">Services</a></li>
                 <li><a href="governance.html">Governance</a></li>
                 <li><a href="about.html">About Us</a></li>
-                <li><a href="login.html" class="btn">Login/Signup</a></li>
+                <li><a href="#" class="btn" onclick="openLoginModal()">Login/Signup</a></li>
             </ul>
         </nav>
     </header>
@@ -50,5 +51,76 @@
             <p>&copy; 2024 Music Engine. Powered by Boserena Studio. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>🔐 QR Code Login</h2>
+            <p>Scan the QR code with your mobile device to login securely</p>
+            <div class="qr-container">
+                <canvas id="qrcode"></canvas>
+            </div>
+            <button class="btn" onclick="generateQR()">Generate New QR Code</button>
+            <p class="qr-status" id="qrStatus">Waiting for scan...</p>
+        </div>
+    </div>
+
+    <script>
+        let qrCodeGenerated = false;
+        let loginTimeout;
+
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+            generateQR();
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            if (loginTimeout) clearTimeout(loginTimeout);
+        }
+
+        function generateQR() {
+            const canvas = document.getElementById('qrcode');
+            const sessionId = 'ME_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            const qrData = `https://musicengine.com/mobile-login?session=${sessionId}`;
+            
+            QRCode.toCanvas(canvas, qrData, {
+                width: 200,
+                margin: 2,
+                color: {
+                    dark: '#007cba',
+                    light: '#ffffff'
+                }
+            }, function (error) {
+                if (error) {
+                    console.error(error);
+                    document.getElementById('qrStatus').textContent = 'Error generating QR code';
+                } else {
+                    qrCodeGenerated = true;
+                    document.getElementById('qrStatus').textContent = 'Scan with your mobile device';
+                    simulateQRLogin();
+                }
+            });
+        }
+
+        function simulateQRLogin() {
+            loginTimeout = setTimeout(() => {
+                document.getElementById('qrStatus').textContent = 'Login successful! Redirecting...';
+                setTimeout(() => {
+                    closeLoginModal();
+                    window.location.href = 'profile.html';
+                }, 2000);
+            }, 8000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('loginModal');
+            if (event.target == modal) {
+                closeLoginModal();
+            }
+        }
+    </script>
 </body>
 </html>
