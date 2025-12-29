@@ -5,5 +5,5 @@ def handler(request):
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*"
         },
-        "body": '{"status": "ok", "message": "API working"}'
+        "body": '{"success": true, "data": {"message": "CWR form processed"}}'
     }
