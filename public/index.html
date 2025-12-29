@@ -4,7 +4,14 @@
     <title>Copyright Registration Form</title>
     <style>
         body { font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .form-section { margin: 30px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .form-container { position: relative; }
+        .step { display: none; padding: 20px; border: 1px solid #ddd; border-radius: 8px; margin: 20px 0; }
+        .step.active { display: block; }
+        .step-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .step-indicator { display: flex; gap: 10px; margin-bottom: 30px; }
+        .step-dot { width: 40px; height: 40px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .step-dot.active { background: #007cba; color: white; }
+        .step-dot.completed { background: #28a745; color: white; }
         .form-group { margin: 15px 0; }
         .form-row { display: flex; gap: 15px; }
         .form-row .form-group { flex: 1; }
@@ -12,24 +19,39 @@
         input, textarea, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
         button { background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
         button:hover { background: #005a87; }
+        .btn-secondary { background: #6c757d; }
         .add-btn { background: #28a745; font-size: 18px; width: 35px; height: 35px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; }
         .remove-btn { background: #dc3545; }
+        .dynamic-section { border: 1px solid #eee; padding: 15px; margin: 10px 0; border-radius: 4px; }
+        .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; }
+        h1 { color: #333; text-align: center; }
+        h2 { color: #333; border-bottom: 2px solid #007cba; padding-bottom: 10px; }
+        h3 { color: #555; margin-top: 25px; }
         .result { margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 4px; }
         .error { background: #ffe6e6; color: #d00; }
         .success { background: #e6ffe6; color: #060; }
-        .dynamic-section { border: 1px solid #eee; padding: 15px; margin: 10px 0; border-radius: 4px; position: relative; }
-        .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
-        h1 { color: #333; text-align: center; }
-        h2 { color: #333; border-bottom: 2px solid #007cba; padding-bottom: 10px; }
     </style>
 </head>
 <body>
     <h1>Copyright Registration Form</h1>
     
+    <div class="step-indicator">
+        <div class="step-dot active" id="dot-1">1</div>
+        <div class="step-dot" id="dot-2">2</div>
+        <div class="step-dot" id="dot-3">3</div>
+        <div class="step-dot" id="dot-4">4</div>
+        <div class="step-dot" id="dot-5">5</div>
+    </div>
+    
     <form id="copyrightForm">
-        <!-- Work Information -->
-        <div class="form-section">
-            <h2>Work Information</h2>
+        <!-- Step 1: Work Information -->
+        <div class="step active" id="step-1">
+            <div class="step-header">
+                <h2>Work Information</h2>
+                <span>Step 1 of 5</span>
+            </div>
+            
             <div class="form-row">
                 <div class="form-group">
                     <label>Work Code:</label>
@@ -85,19 +107,25 @@
                     <label>ISWC:</label>
                     <input type="text" id="iswc" placeholder="T-123456789-0">
                 </div>
-            </div>
-            
-            <div class="form-row">
                 <div class="form-group">
                     <label>Society:</label>
                     <input type="text" id="society" placeholder="ASCAP, BMI, SESAC, etc.">
                 </div>
             </div>
+            
+            <div class="nav-buttons">
+                <div></div>
+                <button type="button" onclick="nextStep()">Next</button>
+            </div>
         </div>
 
-        <!-- Session Info -->
-        <div class="form-section">
-            <h2>Session Info</h2>
+        <!-- Step 2: Session Info -->
+        <div class="step" id="step-2">
+            <div class="step-header">
+                <h2>Session Info</h2>
+                <span>Step 2 of 5</span>
+            </div>
+            
             <div class="form-row">
                 <div class="form-group">
                     <label>Recording Location:</label>
@@ -117,10 +145,9 @@
                 </div>
             </div>
             
-            <!-- Producers -->
             <div class="section-header">
                 <h3>Producers</h3>
-                <button type="button" class="add-btn" onclick="addProducer()" title="Add Producer">+</button>
+                <button type="button" class="add-btn" onclick="addProducer()">+</button>
             </div>
             <div id="producers-container">
                 <div class="dynamic-section producer-entry">
@@ -131,10 +158,9 @@
                 </div>
             </div>
             
-            <!-- Studio Technicians -->
             <div class="section-header">
                 <h3>Studio Technicians</h3>
-                <button type="button" class="add-btn" onclick="addTechnician()" title="Add Technician">+</button>
+                <button type="button" class="add-btn" onclick="addTechnician()">+</button>
             </div>
             <div id="technicians-container">
                 <div class="dynamic-section technician-entry">
@@ -144,22 +170,66 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Lyrics Section -->
-        <div class="form-section">
-            <h2>Lyrics</h2>
-            <div class="form-group">
-                <label>Lyrics:</label>
-                <textarea id="lyrics" rows="8" placeholder="Enter song lyrics here..."></textarea>
+            
+            <div class="nav-buttons">
+                <button type="button" class="btn-secondary" onclick="prevStep()">Previous</button>
+                <button type="button" onclick="nextStep()">Next</button>
             </div>
         </div>
 
-        <!-- Songwriters Section -->
-        <div class="form-section">
+        <!-- Step 3: File Uploads -->
+        <div class="step" id="step-3">
+            <div class="step-header">
+                <h2>File Uploads</h2>
+                <span>Step 3 of 5</span>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Upload Music File:</label>
+                    <input type="file" id="music_file" accept="audio/*">
+                </div>
+                <div class="form-group">
+                    <label>Upload Artwork:</label>
+                    <input type="file" id="artwork_file" accept="image/*">
+                </div>
+            </div>
+            
+            <div class="nav-buttons">
+                <button type="button" class="btn-secondary" onclick="prevStep()">Previous</button>
+                <button type="button" onclick="nextStep()">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Lyrics -->
+        <div class="step" id="step-4">
+            <div class="step-header">
+                <h2>Lyrics</h2>
+                <span>Step 4 of 5</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Lyrics:</label>
+                <textarea id="lyrics" rows="12" placeholder="Enter song lyrics here..."></textarea>
+            </div>
+            
+            <div class="nav-buttons">
+                <button type="button" class="btn-secondary" onclick="prevStep()">Previous</button>
+                <button type="button" onclick="nextStep()">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Rights & Credits -->
+        <div class="step" id="step-5">
+            <div class="step-header">
+                <h2>Rights & Credits</h2>
+                <span>Step 5 of 5</span>
+            </div>
+            
+            <!-- Songwriters -->
             <div class="section-header">
-                <h2>Songwriters</h2>
-                <button type="button" class="add-btn" onclick="addSongwriter()" title="Add Songwriter">+</button>
+                <h3>Songwriters</h3>
+                <button type="button" class="add-btn" onclick="addSongwriter()">+</button>
             </div>
             <div id="songwriters-container">
                 <div class="dynamic-section songwriter-entry">
@@ -169,11 +239,11 @@
                             <input type="text" class="songwriter-name" required>
                         </div>
                         <div class="form-group">
-                            <label>Songwriter IPI:</label>
+                            <label>IPI:</label>
                             <input type="text" class="songwriter-ipi" placeholder="12345678901">
                         </div>
                         <div class="form-group">
-                            <label>Songwriter ISNI:</label>
+                            <label>ISNI:</label>
                             <input type="text" class="songwriter-isni" placeholder="0000000000000000">
                         </div>
                         <div class="form-group">
@@ -183,13 +253,11 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Publishers Section -->
-        <div class="form-section">
+            
+            <!-- Publishers -->
             <div class="section-header">
-                <h2>Publishers</h2>
-                <button type="button" class="add-btn" onclick="addPublisher()" title="Add Publisher">+</button>
+                <h3>Publishers</h3>
+                <button type="button" class="add-btn" onclick="addPublisher()">+</button>
             </div>
             <div id="publishers-container">
                 <div class="dynamic-section publisher-entry">
@@ -199,11 +267,11 @@
                             <input type="text" class="publisher-name">
                         </div>
                         <div class="form-group">
-                            <label>Publisher IPI:</label>
+                            <label>IPI:</label>
                             <input type="text" class="publisher-ipi" placeholder="12345678901">
                         </div>
                         <div class="form-group">
-                            <label>Publisher ISNI:</label>
+                            <label>ISNI:</label>
                             <input type="text" class="publisher-isni" placeholder="0000000000000000">
                         </div>
                         <div class="form-group">
@@ -224,18 +292,15 @@
                                 <option value="JP">Japan</option>
                                 <option value="AU">Australia</option>
                             </select>
-                            <small>Hold Ctrl/Cmd to select multiple</small>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Administrator Section -->
-        <div class="form-section">
+            
+            <!-- Administrators -->
             <div class="section-header">
-                <h2>Administrator</h2>
-                <button type="button" class="add-btn" onclick="addAdministrator()" title="Add Administrator">+</button>
+                <h3>Administrators</h3>
+                <button type="button" class="add-btn" onclick="addAdministrator()">+</button>
             </div>
             <div id="administrators-container">
                 <div class="dynamic-section administrator-entry">
@@ -245,11 +310,11 @@
                             <input type="text" class="administrator-name">
                         </div>
                         <div class="form-group">
-                            <label>Administrator IPI:</label>
+                            <label>IPI:</label>
                             <input type="text" class="administrator-ipi" placeholder="12345678901">
                         </div>
                         <div class="form-group">
-                            <label>Administrator ISNI:</label>
+                            <label>ISNI:</label>
                             <input type="text" class="administrator-isni" placeholder="0000000000000000">
                         </div>
                         <div class="form-group">
@@ -270,84 +335,58 @@
                                 <option value="JP">Japan</option>
                                 <option value="AU">Australia</option>
                             </select>
-                            <small>Hold Ctrl/Cmd to select multiple</small>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- File Uploads -->
-        <div class="form-section">
-            <h2>File Uploads</h2>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Upload Music File:</label>
-                    <input type="file" id="music_file" accept="audio/*">
-                </div>
-                <div class="form-group">
-                    <label>Upload Artwork:</label>
-                    <input type="file" id="artwork_file" accept="image/*">
-                </div>
+            
+            <div class="nav-buttons">
+                <button type="button" class="btn-secondary" onclick="prevStep()">Previous</button>
+                <button type="submit">Submit Registration</button>
             </div>
         </div>
-
-        <button type="submit">Submit Registration</button>
     </form>
     
     <div id="result"></div>
 
     <script>
+        let currentStep = 1;
         let songwriterCount = 1;
         let publisherCount = 1;
         let administratorCount = 1;
         let producerCount = 1;
         let technicianCount = 1;
 
-        function addProducer() {
-            producerCount++;
-            const container = document.getElementById('producers-container');
-            const producerDiv = document.createElement('div');
-            producerDiv.className = 'dynamic-section producer-entry';
-            producerDiv.innerHTML = `
-                <button type="button" class="remove-btn" onclick="removeProducer(this)" style="float: right;">Remove</button>
-                <div class="form-group">
-                    <label>Producer Name:</label>
-                    <input type="text" class="producer-name">
-                </div>
-            `;
-            container.appendChild(producerDiv);
+        function nextStep() {
+            if (currentStep < 5) {
+                document.getElementById(`step-${currentStep}`).classList.remove('active');
+                document.getElementById(`dot-${currentStep}`).classList.add('completed');
+                document.getElementById(`dot-${currentStep}`).classList.remove('active');
+                
+                currentStep++;
+                document.getElementById(`step-${currentStep}`).classList.add('active');
+                document.getElementById(`dot-${currentStep}`).classList.add('active');
+            }
         }
 
-        function addTechnician() {
-            technicianCount++;
-            const container = document.getElementById('technicians-container');
-            const technicianDiv = document.createElement('div');
-            technicianDiv.className = 'dynamic-section technician-entry';
-            technicianDiv.innerHTML = `
-                <button type="button" class="remove-btn" onclick="removeTechnician(this)" style="float: right;">Remove</button>
-                <div class="form-group">
-                    <label>Technician Name:</label>
-                    <input type="text" class="technician-name">
-                </div>
-            `;
-            container.appendChild(technicianDiv);
-        }
-
-        function removeProducer(button) {
-            button.closest('.producer-entry').remove();
-        }
-
-        function removeTechnician(button) {
-            button.closest('.technician-entry').remove();
+        function prevStep() {
+            if (currentStep > 1) {
+                document.getElementById(`step-${currentStep}`).classList.remove('active');
+                document.getElementById(`dot-${currentStep}`).classList.remove('active');
+                
+                currentStep--;
+                document.getElementById(`step-${currentStep}`).classList.add('active');
+                document.getElementById(`dot-${currentStep}`).classList.add('active');
+                document.getElementById(`dot-${currentStep}`).classList.remove('completed');
+            }
         }
 
         function addSongwriter() {
             songwriterCount++;
             const container = document.getElementById('songwriters-container');
-            const songwriterDiv = document.createElement('div');
-            songwriterDiv.className = 'dynamic-section songwriter-entry';
-            songwriterDiv.innerHTML = `
+            const div = document.createElement('div');
+            div.className = 'dynamic-section songwriter-entry';
+            div.innerHTML = `
                 <button type="button" class="remove-btn" onclick="removeSongwriter(this)" style="float: right;">Remove</button>
                 <div class="form-row">
                     <div class="form-group">
@@ -355,11 +394,11 @@
                         <input type="text" class="songwriter-name" required>
                     </div>
                     <div class="form-group">
-                        <label>Songwriter IPI:</label>
+                        <label>IPI:</label>
                         <input type="text" class="songwriter-ipi" placeholder="12345678901">
                     </div>
                     <div class="form-group">
-                        <label>Songwriter ISNI:</label>
+                        <label>ISNI:</label>
                         <input type="text" class="songwriter-isni" placeholder="0000000000000000">
                     </div>
                     <div class="form-group">
@@ -368,15 +407,15 @@
                     </div>
                 </div>
             `;
-            container.appendChild(songwriterDiv);
+            container.appendChild(div);
         }
 
         function addPublisher() {
             publisherCount++;
             const container = document.getElementById('publishers-container');
-            const publisherDiv = document.createElement('div');
-            publisherDiv.className = 'dynamic-section publisher-entry';
-            publisherDiv.innerHTML = `
+            const div = document.createElement('div');
+            div.className = 'dynamic-section publisher-entry';
+            div.innerHTML = `
                 <button type="button" class="remove-btn" onclick="removePublisher(this)" style="float: right;">Remove</button>
                 <div class="form-row">
                     <div class="form-group">
@@ -384,11 +423,11 @@
                         <input type="text" class="publisher-name">
                     </div>
                     <div class="form-group">
-                        <label>Publisher IPI:</label>
+                        <label>IPI:</label>
                         <input type="text" class="publisher-ipi" placeholder="12345678901">
                     </div>
                     <div class="form-group">
-                        <label>Publisher ISNI:</label>
+                        <label>ISNI:</label>
                         <input type="text" class="publisher-isni" placeholder="0000000000000000">
                     </div>
                     <div class="form-group">
@@ -409,19 +448,18 @@
                             <option value="JP">Japan</option>
                             <option value="AU">Australia</option>
                         </select>
-                        <small>Hold Ctrl/Cmd to select multiple</small>
                     </div>
                 </div>
             `;
-            container.appendChild(publisherDiv);
+            container.appendChild(div);
         }
 
         function addAdministrator() {
             administratorCount++;
             const container = document.getElementById('administrators-container');
-            const administratorDiv = document.createElement('div');
-            administratorDiv.className = 'dynamic-section administrator-entry';
-            administratorDiv.innerHTML = `
+            const div = document.createElement('div');
+            div.className = 'dynamic-section administrator-entry';
+            div.innerHTML = `
                 <button type="button" class="remove-btn" onclick="removeAdministrator(this)" style="float: right;">Remove</button>
                 <div class="form-row">
                     <div class="form-group">
@@ -429,11 +467,11 @@
                         <input type="text" class="administrator-name">
                     </div>
                     <div class="form-group">
-                        <label>Administrator IPI:</label>
+                        <label>IPI:</label>
                         <input type="text" class="administrator-ipi" placeholder="12345678901">
                     </div>
                     <div class="form-group">
-                        <label>Administrator ISNI:</label>
+                        <label>ISNI:</label>
                         <input type="text" class="administrator-isni" placeholder="0000000000000000">
                     </div>
                     <div class="form-group">
@@ -454,33 +492,54 @@
                             <option value="JP">Japan</option>
                             <option value="AU">Australia</option>
                         </select>
-                        <small>Hold Ctrl/Cmd to select multiple</small>
                     </div>
                 </div>
             `;
-            container.appendChild(administratorDiv);
+            container.appendChild(div);
         }
 
-        function removeSongwriter(button) {
-            button.closest('.songwriter-entry').remove();
+        function addProducer() {
+            producerCount++;
+            const container = document.getElementById('producers-container');
+            const div = document.createElement('div');
+            div.className = 'dynamic-section producer-entry';
+            div.innerHTML = `
+                <button type="button" class="remove-btn" onclick="removeProducer(this)" style="float: right;">Remove</button>
+                <div class="form-group">
+                    <label>Producer Name:</label>
+                    <input type="text" class="producer-name">
+                </div>
+            `;
+            container.appendChild(div);
         }
 
-        function removePublisher(button) {
-            button.closest('.publisher-entry').remove();
+        function addTechnician() {
+            technicianCount++;
+            const container = document.getElementById('technicians-container');
+            const div = document.createElement('div');
+            div.className = 'dynamic-section technician-entry';
+            div.innerHTML = `
+                <button type="button" class="remove-btn" onclick="removeTechnician(this)" style="float: right;">Remove</button>
+                <div class="form-group">
+                    <label>Technician Name:</label>
+                    <input type="text" class="technician-name">
+                </div>
+            `;
+            container.appendChild(div);
         }
 
-        function removeAdministrator(button) {
-            button.closest('.administrator-entry').remove();
-        }
+        function removeSongwriter(button) { button.closest('.songwriter-entry').remove(); }
+        function removePublisher(button) { button.closest('.publisher-entry').remove(); }
+        function removeAdministrator(button) { button.closest('.administrator-entry').remove(); }
+        function removeProducer(button) { button.closest('.producer-entry').remove(); }
+        function removeTechnician(button) { button.closest('.technician-entry').remove(); }
 
-        // Generate work code
         function generateWorkCode() {
             const prefix = 'WRK';
             const timestamp = Date.now().toString().slice(-6);
             return `${prefix}${timestamp}`;
         }
 
-        // Set work code on page load
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('workcode').value = generateWorkCode();
         });
@@ -488,7 +547,6 @@
         document.getElementById('copyrightForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Collect songwriters
             const songwriters = [];
             document.querySelectorAll('.songwriter-entry').forEach(entry => {
                 songwriters.push({
@@ -499,7 +557,6 @@
                 });
             });
 
-            // Collect publishers
             const publishers = [];
             document.querySelectorAll('.publisher-entry').forEach(entry => {
                 const territories = Array.from(entry.querySelector('.publisher-territory').selectedOptions)
@@ -513,7 +570,6 @@
                 });
             });
 
-            // Collect administrators
             const administrators = [];
             document.querySelectorAll('.administrator-entry').forEach(entry => {
                 const territories = Array.from(entry.querySelector('.administrator-territory').selectedOptions)
@@ -527,20 +583,14 @@
                 });
             });
 
-            // Collect producers
             const producers = [];
             document.querySelectorAll('.producer-entry').forEach(entry => {
-                producers.push({
-                    name: entry.querySelector('.producer-name').value
-                });
+                producers.push({ name: entry.querySelector('.producer-name').value });
             });
 
-            // Collect technicians
             const technicians = [];
             document.querySelectorAll('.technician-entry').forEach(entry => {
-                technicians.push({
-                    name: entry.querySelector('.technician-name').value
-                });
+                technicians.push({ name: entry.querySelector('.technician-name').value });
             });
 
             const data = {
