@@ -89,23 +89,18 @@
             
             <div class="form-row">
                 <div class="form-group">
-                    <label>Territory:</label>
-                    <select id="territory" multiple>
-                        <option value="WW">Worldwide</option>
-                        <option value="US">United States</option>
-                        <option value="CA">Canada</option>
-                        <option value="GB">United Kingdom</option>
-                        <option value="DE">Germany</option>
-                        <option value="FR">France</option>
-                        <option value="JP">Japan</option>
-                        <option value="AU">Australia</option>
-                    </select>
-                    <small>Hold Ctrl/Cmd to select multiple</small>
-                </div>
-                <div class="form-group">
                     <label>Society:</label>
                     <input type="text" id="society" placeholder="ASCAP, BMI, SESAC, etc.">
                 </div>
+            </div>
+        </div>
+
+        <!-- Split Information -->
+        <div class="form-section">
+            <h2>Split Information</h2>
+            <div class="form-group">
+                <label>Split Info:</label>
+                <textarea id="split_info" rows="3" placeholder="Describe ownership splits and percentages"></textarea>
             </div>
         </div>
 
@@ -129,6 +124,10 @@
                         <div class="form-group">
                             <label>Songwriter ISNI:</label>
                             <input type="text" class="songwriter-isni" placeholder="0000000000000000">
+                        </div>
+                        <div class="form-group">
+                            <label>Split %:</label>
+                            <input type="number" class="songwriter-split" min="0" max="100" placeholder="50">
                         </div>
                     </div>
                 </div>
@@ -156,17 +155,83 @@
                             <label>Publisher ISNI:</label>
                             <input type="text" class="publisher-isni" placeholder="0000000000000000">
                         </div>
+                        <div class="form-group">
+                            <label>Split %:</label>
+                            <input type="number" class="publisher-split" min="0" max="100" placeholder="50">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Territory:</label>
+                            <select class="publisher-territory" multiple>
+                                <option value="WW">Worldwide</option>
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="GB">United Kingdom</option>
+                                <option value="DE">Germany</option>
+                                <option value="FR">France</option>
+                                <option value="JP">Japan</option>
+                                <option value="AU">Australia</option>
+                            </select>
+                            <small>Hold Ctrl/Cmd to select multiple</small>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Split Information -->
+        <!-- Administrator Section -->
         <div class="form-section">
-            <h2>Split Information</h2>
+            <div class="section-header">
+                <h2>Administrator</h2>
+                <button type="button" class="add-btn" onclick="addAdministrator()" title="Add Administrator">+</button>
+            </div>
+            <div id="administrators-container">
+                <div class="dynamic-section administrator-entry">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Administrator Name:</label>
+                            <input type="text" class="administrator-name">
+                        </div>
+                        <div class="form-group">
+                            <label>Administrator IPI:</label>
+                            <input type="text" class="administrator-ipi" placeholder="12345678901">
+                        </div>
+                        <div class="form-group">
+                            <label>Administrator ISNI:</label>
+                            <input type="text" class="administrator-isni" placeholder="0000000000000000">
+                        </div>
+                        <div class="form-group">
+                            <label>Split %:</label>
+                            <input type="number" class="administrator-split" min="0" max="100" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Territory:</label>
+                            <select class="administrator-territory" multiple>
+                                <option value="WW">Worldwide</option>
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="GB">United Kingdom</option>
+                                <option value="DE">Germany</option>
+                                <option value="FR">France</option>
+                                <option value="JP">Japan</option>
+                                <option value="AU">Australia</option>
+                            </select>
+                            <small>Hold Ctrl/Cmd to select multiple</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Music Upload -->
+        <div class="form-section">
+            <h2>Music Upload</h2>
             <div class="form-group">
-                <label>Split Info:</label>
-                <textarea id="split_info" rows="3" placeholder="Describe ownership splits and percentages"></textarea>
+                <label>Upload Music File:</label>
+                <input type="file" id="music_file" accept="audio/*">
             </div>
         </div>
 
@@ -178,6 +243,7 @@
     <script>
         let songwriterCount = 1;
         let publisherCount = 1;
+        let administratorCount = 1;
 
         function addSongwriter() {
             songwriterCount++;
@@ -198,6 +264,10 @@
                     <div class="form-group">
                         <label>Songwriter ISNI:</label>
                         <input type="text" class="songwriter-isni" placeholder="0000000000000000">
+                    </div>
+                    <div class="form-group">
+                        <label>Split %:</label>
+                        <input type="number" class="songwriter-split" min="0" max="100" placeholder="50">
                     </div>
                 </div>
             `;
@@ -224,9 +294,74 @@
                         <label>Publisher ISNI:</label>
                         <input type="text" class="publisher-isni" placeholder="0000000000000000">
                     </div>
+                    <div class="form-group">
+                        <label>Split %:</label>
+                        <input type="number" class="publisher-split" min="0" max="100" placeholder="50">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Territory:</label>
+                        <select class="publisher-territory" multiple>
+                            <option value="WW">Worldwide</option>
+                            <option value="US">United States</option>
+                            <option value="CA">Canada</option>
+                            <option value="GB">United Kingdom</option>
+                            <option value="DE">Germany</option>
+                            <option value="FR">France</option>
+                            <option value="JP">Japan</option>
+                            <option value="AU">Australia</option>
+                        </select>
+                        <small>Hold Ctrl/Cmd to select multiple</small>
+                    </div>
                 </div>
             `;
             container.appendChild(publisherDiv);
+        }
+
+        function addAdministrator() {
+            administratorCount++;
+            const container = document.getElementById('administrators-container');
+            const administratorDiv = document.createElement('div');
+            administratorDiv.className = 'dynamic-section administrator-entry';
+            administratorDiv.innerHTML = `
+                <button type="button" class="remove-btn" onclick="removeAdministrator(this)" style="float: right;">Remove</button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Administrator Name:</label>
+                        <input type="text" class="administrator-name">
+                    </div>
+                    <div class="form-group">
+                        <label>Administrator IPI:</label>
+                        <input type="text" class="administrator-ipi" placeholder="12345678901">
+                    </div>
+                    <div class="form-group">
+                        <label>Administrator ISNI:</label>
+                        <input type="text" class="administrator-isni" placeholder="0000000000000000">
+                    </div>
+                    <div class="form-group">
+                        <label>Split %:</label>
+                        <input type="number" class="administrator-split" min="0" max="100" placeholder="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Territory:</label>
+                        <select class="administrator-territory" multiple>
+                            <option value="WW">Worldwide</option>
+                            <option value="US">United States</option>
+                            <option value="CA">Canada</option>
+                            <option value="GB">United Kingdom</option>
+                            <option value="DE">Germany</option>
+                            <option value="FR">France</option>
+                            <option value="JP">Japan</option>
+                            <option value="AU">Australia</option>
+                        </select>
+                        <small>Hold Ctrl/Cmd to select multiple</small>
+                    </div>
+                </div>
+            `;
+            container.appendChild(administratorDiv);
         }
 
         function removeSongwriter(button) {
@@ -235,6 +370,10 @@
 
         function removePublisher(button) {
             button.closest('.publisher-entry').remove();
+        }
+
+        function removeAdministrator(button) {
+            button.closest('.administrator-entry').remove();
         }
 
         // Generate work code
@@ -258,23 +397,38 @@
                 songwriters.push({
                     name: entry.querySelector('.songwriter-name').value,
                     ipi: entry.querySelector('.songwriter-ipi').value,
-                    isni: entry.querySelector('.songwriter-isni').value
+                    isni: entry.querySelector('.songwriter-isni').value,
+                    split: entry.querySelector('.songwriter-split').value
                 });
             });
 
             // Collect publishers
             const publishers = [];
             document.querySelectorAll('.publisher-entry').forEach(entry => {
+                const territories = Array.from(entry.querySelector('.publisher-territory').selectedOptions)
+                    .map(option => option.value);
                 publishers.push({
                     name: entry.querySelector('.publisher-name').value,
                     ipi: entry.querySelector('.publisher-ipi').value,
-                    isni: entry.querySelector('.publisher-isni').value
+                    isni: entry.querySelector('.publisher-isni').value,
+                    split: entry.querySelector('.publisher-split').value,
+                    territory: territories.join(', ')
                 });
             });
 
-            // Collect territories
-            const territories = Array.from(document.getElementById('territory').selectedOptions)
-                .map(option => option.value);
+            // Collect administrators
+            const administrators = [];
+            document.querySelectorAll('.administrator-entry').forEach(entry => {
+                const territories = Array.from(entry.querySelector('.administrator-territory').selectedOptions)
+                    .map(option => option.value);
+                administrators.push({
+                    name: entry.querySelector('.administrator-name').value,
+                    ipi: entry.querySelector('.administrator-ipi').value,
+                    isni: entry.querySelector('.administrator-isni').value,
+                    split: entry.querySelector('.administrator-split').value,
+                    territory: territories.join(', ')
+                });
+            });
 
             const data = {
                 workcode: document.getElementById('workcode').value,
@@ -291,7 +445,9 @@
                 society: document.getElementById('society').value,
                 split_info: document.getElementById('split_info').value,
                 songwriters: songwriters,
-                publishers: publishers
+                publishers: publishers,
+                administrators: administrators,
+                music_file: document.getElementById('music_file').files[0]?.name || null
             };
             
             try {
