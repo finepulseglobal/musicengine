@@ -13,7 +13,6 @@
             <div class="logo">Music Engine Admin</div>
             <ul class="nav-links">
                 <li><a href="admin.html">Dashboard</a></li>
-                <li><a href="user-management.html">Users</a></li>
                 <li><a href="#" onclick="adminLogout()" class="btn">Logout</a></li>
             </ul>
         </nav>
@@ -47,7 +46,7 @@
                 <div class="admin-card">
                     <h3>User Management</h3>
                     <p>Manage user accounts, subscriptions, and permissions</p>
-                    <a href="user-management.html" class="btn">Manage Users</a>
+                    <button class="btn" onclick="showUserManagement()">Manage Users</button>
                 </div>
                 
                 <div class="admin-card">
@@ -107,17 +106,51 @@
 
     <!-- User Management Modal -->
     <div id="userManagementModal" class="modal">
-        <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-content" style="max-width: 90%; max-height: 90%; overflow-y: auto;">
             <span class="close" onclick="closeUserManagement()">&times;</span>
             <h2>👥 User Management</h2>
+            
+            <div class="user-management-header">
+                <div class="user-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Users:</span>
+                        <span class="stat-value" id="modalTotalUsers">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Active:</span>
+                        <span class="stat-value" id="modalActiveUsers">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Creator Plans:</span>
+                        <span class="stat-value" id="modalCreatorUsers">0</span>
+                    </div>
+                </div>
+            </div>
             
             <div class="user-actions">
                 <button class="btn" onclick="showCreateUser()">Create New User</button>
                 <button class="btn btn-secondary" onclick="loadUsers()">Refresh Users</button>
+                <input type="text" id="modalSearchUsers" placeholder="Search users..." onkeyup="filterModalUsers()" style="margin-left: 1rem; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
             </div>
             
-            <div id="usersList" class="users-list">
-                <p>Loading users...</p>
+            <div class="users-table-container" style="margin-top: 1rem;">
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Plan</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersList">
+                        <tr>
+                            <td colspan="6" class="loading">Loading users...</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -234,26 +267,44 @@
             const usersList = document.getElementById('usersList');
             
             if (users.length === 0) {
-                usersList.innerHTML = '<p>No users found</p>';
+                usersList.innerHTML = '<tr><td colspan="6" class="no-data">No users found</td></tr>';
                 return;
             }
             
             const usersHTML = users.map(user => `
-                <div class="user-item">
-                    <div class="user-info">
-                        <strong>${user.name}</strong><br>
-                        <span class="user-email">${user.email}</span><br>
-                        <span class="user-plan">${user.plan}</span> | 
-                        <span class="user-status status-${user.status}">${user.status}</span>
-                    </div>
-                    <div class="user-actions">
+                <tr>
+                    <td><strong>${user.name}</strong></td>
+                    <td>${user.email}</td>
+                    <td><span class="plan-badge plan-${user.plan.toLowerCase().replace(' ', '-')}">${user.plan}</span></td>
+                    <td><span class="status-badge status-${user.status}">${user.status}</span></td>
+                    <td>${formatDate(user.createdAt)}</td>
+                    <td class="actions">
                         <button class="btn-small" onclick="editUser('${user.id}')">Edit</button>
                         <button class="btn-small btn-danger" onclick="deleteUser('${user.id}', '${user.name}')">Delete</button>
-                    </div>
-                </div>
+                    </td>
+                </tr>
             `).join('');
             
             usersList.innerHTML = usersHTML;
+            
+            // Update stats
+            document.getElementById('modalTotalUsers').textContent = users.length;
+            document.getElementById('modalActiveUsers').textContent = users.filter(u => u.status === 'active').length;
+            document.getElementById('modalCreatorUsers').textContent = users.filter(u => u.plan === 'Creator').length;
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString();
+        }
+
+        function filterModalUsers() {
+            const searchTerm = document.getElementById('modalSearchUsers').value.toLowerCase();
+            const allRows = document.querySelectorAll('#usersList tr');
+            
+            allRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
         }
 
         async function deleteUser(userId, userName) {
@@ -465,6 +516,91 @@
         
         .error {
             color: #dc3545;
+        }
+        
+        .user-management-header {
+            margin-bottom: 1rem;
+        }
+        
+        .user-stats {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-label {
+            display: block;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .stat-value {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #007cba;
+        }
+        
+        .users-table-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+        
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .users-table th,
+        .users-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .users-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .plan-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .plan-creator { background: #e3f2fd; color: #1976d2; }
+        .plan-record-label { background: #f3e5f5; color: #7b1fa2; }
+        .plan-media-house { background: #e8f5e8; color: #388e3c; }
+        
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status-active { background: #d4edda; color: #155724; }
+        .status-inactive { background: #f8d7da; color: #721c24; }
+        .status-suspended { background: #fff3cd; color: #856404; }
+        
+        .actions {
+            white-space: nowrap;
+        }
+        
+        .loading, .no-data {
+            text-align: center;
+            color: #666;
+            font-style: italic;
         }
     </style>
 </body>
