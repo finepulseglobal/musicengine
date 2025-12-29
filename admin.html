@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Music Engine</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Admin Header -->
+    <header style="background: #dc3545;">
+        <nav class="container">
+            <div class="logo">Music Engine Admin</div>
+            <ul class="nav-links">
+                <li><a href="admin.html">Dashboard</a></li>
+                <li><a href="#" onclick="adminLogout()" class="btn">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Admin Content -->
+    <div class="page-content">
+        <div class="container">
+            <h2 class="section-title">Admin Dashboard</h2>
+            
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <h3>Total Users</h3>
+                    <div class="stat-number">1,247</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Registered Works</h3>
+                    <div class="stat-number">8,532</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Revenue (Monthly)</h3>
+                    <div class="stat-number">$45,230</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Subscriptions</h3>
+                    <div class="stat-number">892</div>
+                </div>
+            </div>
+
+            <div class="admin-sections">
+                <div class="admin-card">
+                    <h3>User Management</h3>
+                    <p>Manage user accounts, subscriptions, and permissions</p>
+                    <button class="btn">Manage Users</button>
+                </div>
+                
+                <div class="admin-card">
+                    <h3>Copyright Registrations</h3>
+                    <p>Review and approve copyright registration submissions</p>
+                    <button class="btn">View Registrations</button>
+                </div>
+                
+                <div class="admin-card">
+                    <h3>Payment Management</h3>
+                    <p>Monitor payments, refunds, and subscription changes</p>
+                    <button class="btn">Payment Dashboard</button>
+                </div>
+                
+                <div class="admin-card">
+                    <h3>System Settings</h3>
+                    <p>Configure platform settings and integrations</p>
+                    <button class="btn">Settings</button>
+                </div>
+                
+                <div class="admin-card">
+                    <h3>Analytics</h3>
+                    <p>View detailed analytics and performance metrics</p>
+                    <button class="btn">View Analytics</button>
+                </div>
+                
+                <div class="admin-card">
+                    <h3>Support Tickets</h3>
+                    <p>Manage customer support requests and issues</p>
+                    <button class="btn">Support Queue</button>
+                </div>
+            </div>
+
+            <div class="recent-activity">
+                <h3>Recent Activity</h3>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <span class="activity-time">2 minutes ago</span>
+                        <span class="activity-text">New user registration: artist@example.com</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="activity-time">15 minutes ago</span>
+                        <span class="activity-text">Copyright registration submitted: "New Song Title"</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="activity-time">1 hour ago</span>
+                        <span class="activity-text">Payment received: $999 (Record Label plan)</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="activity-time">2 hours ago</span>
+                        <span class="activity-text">Support ticket resolved: #12345</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check admin authentication
+        function checkAdminAuth() {
+            const isAdmin = localStorage.getItem('musicEngineAdmin');
+            if (!isAdmin) {
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        // Admin logout
+        function adminLogout() {
+            localStorage.removeItem('musicEngineAdmin');
+            localStorage.removeItem('adminUser');
+            window.location.href = 'admin-login.html';
+        }
+
+        // Initialize admin check
+        document.addEventListener('DOMContentLoaded', checkAdminAuth);
+    </script>
+
+    <style>
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007cba;
+            margin-top: 0.5rem;
+        }
+        
+        .admin-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+        
+        .admin-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .recent-activity {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+        
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .activity-time {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .activity-text {
+            flex: 1;
+            margin-left: 1rem;
+        }
+    </style>
+</body>
+</html>
