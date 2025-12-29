@@ -95,12 +95,63 @@
             </div>
         </div>
 
-        <!-- Split Information -->
+        <!-- Session Info -->
         <div class="form-section">
-            <h2>Split Information</h2>
+            <h2>Session Info</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Recording Location:</label>
+                    <input type="text" id="recording_location" placeholder="Studio name or location">
+                </div>
+                <div class="form-group">
+                    <label>Key:</label>
+                    <input type="text" id="key" placeholder="C Major, A Minor, etc.">
+                </div>
+                <div class="form-group">
+                    <label>BPM:</label>
+                    <input type="number" id="bpm" placeholder="120">
+                </div>
+                <div class="form-group">
+                    <label>Tempo:</label>
+                    <input type="text" id="tempo" placeholder="Moderate, Fast, Slow">
+                </div>
+            </div>
+            
+            <!-- Producers -->
+            <div class="section-header">
+                <h3>Producers</h3>
+                <button type="button" class="add-btn" onclick="addProducer()" title="Add Producer">+</button>
+            </div>
+            <div id="producers-container">
+                <div class="dynamic-section producer-entry">
+                    <div class="form-group">
+                        <label>Producer Name:</label>
+                        <input type="text" class="producer-name">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Studio Technicians -->
+            <div class="section-header">
+                <h3>Studio Technicians</h3>
+                <button type="button" class="add-btn" onclick="addTechnician()" title="Add Technician">+</button>
+            </div>
+            <div id="technicians-container">
+                <div class="dynamic-section technician-entry">
+                    <div class="form-group">
+                        <label>Technician Name:</label>
+                        <input type="text" class="technician-name">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lyrics Section -->
+        <div class="form-section">
+            <h2>Lyrics</h2>
             <div class="form-group">
-                <label>Split Info:</label>
-                <textarea id="split_info" rows="3" placeholder="Describe ownership splits and percentages"></textarea>
+                <label>Lyrics:</label>
+                <textarea id="lyrics" rows="8" placeholder="Enter song lyrics here..."></textarea>
             </div>
         </div>
 
@@ -226,12 +277,18 @@
             </div>
         </div>
 
-        <!-- Music Upload -->
+        <!-- File Uploads -->
         <div class="form-section">
-            <h2>Music Upload</h2>
-            <div class="form-group">
-                <label>Upload Music File:</label>
-                <input type="file" id="music_file" accept="audio/*">
+            <h2>File Uploads</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Upload Music File:</label>
+                    <input type="file" id="music_file" accept="audio/*">
+                </div>
+                <div class="form-group">
+                    <label>Upload Artwork:</label>
+                    <input type="file" id="artwork_file" accept="image/*">
+                </div>
             </div>
         </div>
 
@@ -244,6 +301,46 @@
         let songwriterCount = 1;
         let publisherCount = 1;
         let administratorCount = 1;
+        let producerCount = 1;
+        let technicianCount = 1;
+
+        function addProducer() {
+            producerCount++;
+            const container = document.getElementById('producers-container');
+            const producerDiv = document.createElement('div');
+            producerDiv.className = 'dynamic-section producer-entry';
+            producerDiv.innerHTML = `
+                <button type="button" class="remove-btn" onclick="removeProducer(this)" style="float: right;">Remove</button>
+                <div class="form-group">
+                    <label>Producer Name:</label>
+                    <input type="text" class="producer-name">
+                </div>
+            `;
+            container.appendChild(producerDiv);
+        }
+
+        function addTechnician() {
+            technicianCount++;
+            const container = document.getElementById('technicians-container');
+            const technicianDiv = document.createElement('div');
+            technicianDiv.className = 'dynamic-section technician-entry';
+            technicianDiv.innerHTML = `
+                <button type="button" class="remove-btn" onclick="removeTechnician(this)" style="float: right;">Remove</button>
+                <div class="form-group">
+                    <label>Technician Name:</label>
+                    <input type="text" class="technician-name">
+                </div>
+            `;
+            container.appendChild(technicianDiv);
+        }
+
+        function removeProducer(button) {
+            button.closest('.producer-entry').remove();
+        }
+
+        function removeTechnician(button) {
+            button.closest('.technician-entry').remove();
+        }
 
         function addSongwriter() {
             songwriterCount++;
@@ -430,6 +527,22 @@
                 });
             });
 
+            // Collect producers
+            const producers = [];
+            document.querySelectorAll('.producer-entry').forEach(entry => {
+                producers.push({
+                    name: entry.querySelector('.producer-name').value
+                });
+            });
+
+            // Collect technicians
+            const technicians = [];
+            document.querySelectorAll('.technician-entry').forEach(entry => {
+                technicians.push({
+                    name: entry.querySelector('.technician-name').value
+                });
+            });
+
             const data = {
                 workcode: document.getElementById('workcode').value,
                 title: document.getElementById('title').value,
@@ -441,13 +554,19 @@
                 release_date: document.getElementById('release_date').value,
                 release_type: document.getElementById('release_type').value,
                 iswc: document.getElementById('iswc').value,
-                territory: territories.join(', '),
                 society: document.getElementById('society').value,
-                split_info: document.getElementById('split_info').value,
+                recording_location: document.getElementById('recording_location').value,
+                key: document.getElementById('key').value,
+                bpm: document.getElementById('bpm').value,
+                tempo: document.getElementById('tempo').value,
+                lyrics: document.getElementById('lyrics').value,
                 songwriters: songwriters,
                 publishers: publishers,
                 administrators: administrators,
-                music_file: document.getElementById('music_file').files[0]?.name || null
+                producers: producers,
+                technicians: technicians,
+                music_file: document.getElementById('music_file').files[0]?.name || null,
+                artwork_file: document.getElementById('artwork_file').files[0]?.name || null
             };
             
             try {
