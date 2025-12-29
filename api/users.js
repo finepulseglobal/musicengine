@@ -1,26 +1,35 @@
-// Simple in-memory user storage (use database in production)
-const users = new Map();
-
-// Initialize with some demo users
-users.set('user1@example.com', {
-    id: 'user_1',
-    name: 'John Artist',
-    email: 'user1@example.com',
-    plan: 'Creator',
-    status: 'active',
-    createdAt: '2024-01-15T10:00:00Z',
-    lastLogin: '2024-01-20T14:30:00Z'
-});
-
-users.set('user2@example.com', {
-    id: 'user_2',
-    name: 'Jane Producer',
-    email: 'user2@example.com',
-    plan: 'Record Label',
-    status: 'active',
-    createdAt: '2024-01-10T09:00:00Z',
-    lastLogin: '2024-01-19T16:45:00Z'
-});
+// Shared user storage - simple in-memory with persistence simulation
+let userData = {
+    users: [
+        {
+            id: 'user_1',
+            name: 'John Artist',
+            email: 'user1@example.com',
+            plan: 'Creator',
+            status: 'active',
+            createdAt: '2024-01-15T10:00:00Z',
+            lastLogin: '2024-01-20T14:30:00Z'
+        },
+        {
+            id: 'user_2',
+            name: 'Jane Producer',
+            email: 'user2@example.com',
+            plan: 'Record Label',
+            status: 'active',
+            createdAt: '2024-01-10T09:00:00Z',
+            lastLogin: '2024-01-19T16:45:00Z'
+        },
+        {
+            id: 'user_3',
+            name: 'Mike Studio',
+            email: 'mike@studio.com',
+            plan: 'Media House',
+            status: 'active',
+            createdAt: '2024-01-05T08:00:00Z',
+            lastLogin: '2024-01-21T12:15:00Z'
+        }
+    ]
+};
 
 export default function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -43,7 +52,7 @@ export default function handler(req, res) {
     if (method === 'GET') {
         // Get all users or specific user
         if (userId) {
-            const user = Array.from(users.values()).find(u => u.id === userId);
+            const user = userData.users.find(u => u.id === userId);
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
             }
@@ -51,8 +60,7 @@ export default function handler(req, res) {
         }
         
         // Return all users
-        const allUsers = Array.from(users.values());
-        return res.status(200).json({ users: allUsers, total: allUsers.length });
+        return res.status(200).json({ users: userData.users, total: userData.users.length });
     }
     
     if (method === 'POST') {
@@ -63,7 +71,8 @@ export default function handler(req, res) {
             return res.status(400).json({ error: 'Name and email are required' });
         }
         
-        if (users.has(email)) {
+        // Check if user already exists
+        if (userData.users.find(u => u.email === email)) {
             return res.status(409).json({ error: 'User already exists' });
         }
         
@@ -77,37 +86,36 @@ export default function handler(req, res) {
             lastLogin: null
         };
         
-        users.set(email, newUser);
+        userData.users.push(newUser);
         return res.status(201).json(newUser);
     }
     
     if (method === 'PUT' && userId) {
         // Update user
-        const user = Array.from(users.values()).find(u => u.id === userId);
-        if (!user) {
+        const userIndex = userData.users.findIndex(u => u.id === userId);
+        if (userIndex === -1) {
             return res.status(404).json({ error: 'User not found' });
         }
         
         const { name, plan, status } = req.body;
-        const updatedUser = {
-            ...user,
+        userData.users[userIndex] = {
+            ...userData.users[userIndex],
             ...(name && { name }),
             ...(plan && { plan }),
             ...(status && { status })
         };
         
-        users.set(user.email, updatedUser);
-        return res.status(200).json(updatedUser);
+        return res.status(200).json(userData.users[userIndex]);
     }
     
     if (method === 'DELETE' && userId) {
         // Delete user
-        const user = Array.from(users.values()).find(u => u.id === userId);
-        if (!user) {
+        const userIndex = userData.users.findIndex(u => u.id === userId);
+        if (userIndex === -1) {
             return res.status(404).json({ error: 'User not found' });
         }
         
-        users.delete(user.email);
+        userData.users.splice(userIndex, 1);
         return res.status(200).json({ message: 'User deleted successfully' });
     }
     

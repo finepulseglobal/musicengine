@@ -207,3 +207,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Check authentication before allowing registration
+function checkAuthAndRegister() {
+    const authToken = localStorage.getItem('musicEngineAuth');
+    const adminAuth = localStorage.getItem('musicEngineAdmin');
+    
+    if (authToken || adminAuth === 'true') {
+        window.location.href = 'register.html';
+    } else {
+        alert('Please login first to register your music.');
+        openLoginModal();
+    }
+}
