@@ -40,8 +40,6 @@
         <div class="step-dot active" id="dot-1">1</div>
         <div class="step-dot" id="dot-2">2</div>
         <div class="step-dot" id="dot-3">3</div>
-        <div class="step-dot" id="dot-4">4</div>
-        <div class="step-dot" id="dot-5">5</div>
     </div>
     
     <form id="copyrightForm">
@@ -49,7 +47,7 @@
         <div class="step active" id="step-1">
             <div class="step-header">
                 <h2>Work Information</h2>
-                <span>Step 1 of 5</span>
+                <span>Step 1 of 3</span>
             </div>
             
             <div class="form-row">
@@ -119,13 +117,15 @@
             </div>
         </div>
 
-        <!-- Step 2: Session Info -->
+        <!-- Step 2: Session Info, Files & Lyrics -->
         <div class="step" id="step-2">
             <div class="step-header">
-                <h2>Session Info</h2>
-                <span>Step 2 of 5</span>
+                <h2>Session Info, Files & Lyrics</h2>
+                <span>Step 2 of 3</span>
             </div>
             
+            <!-- Session Info -->
+            <h3>Session Information</h3>
             <div class="form-row">
                 <div class="form-group">
                     <label>Recording Location:</label>
@@ -171,19 +171,8 @@
                 </div>
             </div>
             
-            <div class="nav-buttons">
-                <button type="button" class="btn-secondary" onclick="prevStep()">Previous</button>
-                <button type="button" onclick="nextStep()">Next</button>
-            </div>
-        </div>
-
-        <!-- Step 3: File Uploads -->
-        <div class="step" id="step-3">
-            <div class="step-header">
-                <h2>File Uploads</h2>
-                <span>Step 3 of 5</span>
-            </div>
-            
+            <!-- File Uploads -->
+            <h3>File Uploads</h3>
             <div class="form-row">
                 <div class="form-group">
                     <label>Upload Music File:</label>
@@ -193,24 +182,28 @@
                     <label>Upload Artwork:</label>
                     <input type="file" id="artwork_file" accept="image/*">
                 </div>
+                <div class="form-group">
+                    <label>Language:</label>
+                    <select id="language">
+                        <option value="EN">English</option>
+                        <option value="ES">Spanish</option>
+                        <option value="FR">French</option>
+                        <option value="DE">German</option>
+                        <option value="IT">Italian</option>
+                        <option value="PT">Portuguese</option>
+                        <option value="JA">Japanese</option>
+                        <option value="KO">Korean</option>
+                        <option value="ZH">Chinese</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
             </div>
             
-            <div class="nav-buttons">
-                <button type="button" class="btn-secondary" onclick="prevStep()">Previous</button>
-                <button type="button" onclick="nextStep()">Next</button>
-            </div>
-        </div>
-
-        <!-- Step 4: Lyrics -->
-        <div class="step" id="step-4">
-            <div class="step-header">
-                <h2>Lyrics</h2>
-                <span>Step 4 of 5</span>
-            </div>
-            
+            <!-- Lyrics -->
+            <h3>Lyrics</h3>
             <div class="form-group">
                 <label>Lyrics:</label>
-                <textarea id="lyrics" rows="12" placeholder="Enter song lyrics here..."></textarea>
+                <textarea id="lyrics" rows="8" placeholder="Enter song lyrics here..."></textarea>
             </div>
             
             <div class="nav-buttons">
@@ -219,11 +212,11 @@
             </div>
         </div>
 
-        <!-- Step 5: Rights & Credits -->
-        <div class="step" id="step-5">
+        <!-- Step 3: Rights & Credits -->
+        <div class="step" id="step-3">
             <div class="step-header">
                 <h2>Rights & Credits</h2>
-                <span>Step 5 of 5</span>
+                <span>Step 3 of 3</span>
             </div>
             
             <!-- Songwriters -->
@@ -358,7 +351,7 @@
         let technicianCount = 1;
 
         function nextStep() {
-            if (currentStep < 5) {
+            if (currentStep < 3) {
                 document.getElementById(`step-${currentStep}`).classList.remove('active');
                 document.getElementById(`dot-${currentStep}`).classList.add('completed');
                 document.getElementById(`dot-${currentStep}`).classList.remove('active');
@@ -608,7 +601,7 @@
                 recording_location: document.getElementById('recording_location').value,
                 key: document.getElementById('key').value,
                 bpm: document.getElementById('bpm').value,
-                tempo: document.getElementById('tempo').value,
+                language: document.getElementById('language').value,
                 lyrics: document.getElementById('lyrics').value,
                 songwriters: songwriters,
                 publishers: publishers,
