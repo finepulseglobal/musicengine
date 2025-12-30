@@ -294,8 +294,8 @@ footer::before {
 }
 
 .footer-content {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     margin-bottom: 2rem;
     position: relative;
@@ -305,6 +305,7 @@ footer::before {
 .footer-links {
     display: flex;
     gap: 2rem;
+    justify-self: end;
 }
 
 .footer-links a {
@@ -319,9 +320,15 @@ footer::before {
     transform: translateY(-2px);
 }
 
+.footer-copyright {
+    text-align: center;
+    justify-self: center;
+}
+
 .social-media {
     display: flex;
     gap: 1rem;
+    justify-self: end;
 }
 
 .social-icon {
