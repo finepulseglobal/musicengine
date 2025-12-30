@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Header -->
     <header>
         <nav class="container">
@@ -23,9 +24,10 @@
     </header>
 
     <!-- Registration Content -->
-    <div class="page-content">
+    <div class="page-content" id="main-content">
         <div class="container">
             <h2 class="section-title">Copyright Registration Form</h2>
+            <div class="auto-save-status" id="autoSaveStatus">Auto-saved</div>
             <div class="form-container">
                 <!-- Step Indicator -->
                 <div class="step-indicator">
@@ -45,7 +47,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="title">Title:</label>
-                                <input type="text" id="title" placeholder="Song title" required>
+                                <div class="tooltip">
+                                    <input type="text" id="title" placeholder="Song title" required>
+                                    <span class="tooltiptext">Enter the official title of your musical work</span>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="catalogNo">Catalog No:</label>
@@ -55,7 +60,10 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Primary Artist:</label>
-                                <input type="text" id="primaryArtist" placeholder="Primary artist name" required>
+                                <div class="tooltip">
+                                    <input type="text" id="primaryArtist" placeholder="Primary artist name" required>
+                                    <span class="tooltiptext">Main performing artist or band name</span>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>Featured Artist:</label>
@@ -65,7 +73,10 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>ISRC:</label>
-                                <input type="text" id="isrc" placeholder="USRC17607839">
+                                <div class="tooltip">
+                                    <input type="text" id="isrc" placeholder="USRC17607839">
+                                    <span class="tooltiptext">International Standard Recording Code - unique identifier for recordings</span>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>Duration:</label>
@@ -255,20 +266,136 @@
 
     <script>
         let currentStep = 1;
+        let autoSaveTimer;
+
+        // Auto-save functionality
+        function initAutoSave() {
+            const formInputs = document.querySelectorAll('#registrationForm input, #registrationForm select, #registrationForm textarea');
+            formInputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    clearTimeout(autoSaveTimer);
+                    autoSaveTimer = setTimeout(autoSaveForm, 2000);
+                });
+            });
+            
+            // Load saved data on page load
+            loadSavedData();
+        }
+        
+        function autoSaveForm() {
+            const formData = {};
+            const inputs = document.querySelectorAll('#registrationForm input, #registrationForm select, #registrationForm textarea');
+            
+            inputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    formData[input.id] = input.checked;
+                } else {
+                    formData[input.id] = input.value;
+                }
+            });
+            
+            localStorage.setItem('musicEngineRegistration', JSON.stringify(formData));
+            showAutoSaveStatus();
+        }
+        
+        function loadSavedData() {
+            const savedData = localStorage.getItem('musicEngineRegistration');
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                Object.keys(formData).forEach(key => {
+                    const input = document.getElementById(key);
+                    if (input) {
+                        if (input.type === 'checkbox') {
+                            input.checked = formData[key];
+                        } else {
+                            input.value = formData[key];
+                        }
+                    }
+                });
+            }
+        }
+        
+        function showAutoSaveStatus() {
+            const status = document.getElementById('autoSaveStatus');
+            status.classList.add('show');
+            setTimeout(() => {
+                status.classList.remove('show');
+            }, 2000);
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                const nextBtn = document.getElementById('nextBtn');
+                const submitBtn = document.getElementById('submitBtn');
+                
+                if (nextBtn.style.display !== 'none') {
+                    nextStep();
+                } else if (submitBtn.style.display !== 'none') {
+                    document.getElementById('registrationForm').dispatchEvent(new Event('submit'));
+                }
+            }
+            
+            if (e.key === 'Escape') {
+                if (currentStep > 1) {
+                    previousStep();
+                }
+            }
+        });
+        
+        // Initialize auto-save when page loads
+        document.addEventListener('DOMContentLoaded', initAutoSave);
 
         function nextStep() {
             if (currentStep < 3) {
-                document.getElementById(`formStep${currentStep}`).classList.remove('active');
-                document.getElementById(`step${currentStep}`).classList.add('completed');
-                document.getElementById(`step${currentStep}`).classList.remove('active');
-                
-                currentStep++;
-                
-                document.getElementById(`formStep${currentStep}`).classList.add('active');
-                document.getElementById(`step${currentStep}`).classList.add('active');
-                
-                updateButtons();
+                if (validateCurrentStep()) {
+                    document.getElementById(`formStep${currentStep}`).classList.remove('active');
+                    document.getElementById(`step${currentStep}`).classList.add('completed');
+                    document.getElementById(`step${currentStep}`).classList.remove('active');
+                    
+                    currentStep++;
+                    
+                    document.getElementById(`formStep${currentStep}`).classList.add('active');
+                    document.getElementById(`step${currentStep}`).classList.add('active');
+                    
+                    updateButtons();
+                }
             }
+        }
+
+        function validateCurrentStep() {
+            let isValid = true;
+            const currentStepElement = document.getElementById(`formStep${currentStep}`);
+            
+            // Clear previous errors
+            currentStepElement.querySelectorAll('.error-message').forEach(error => error.remove());
+            currentStepElement.querySelectorAll('.error').forEach(field => field.classList.remove('error'));
+            
+            if (currentStep === 1) {
+                const title = document.getElementById('title');
+                const primaryArtist = document.getElementById('primaryArtist');
+                
+                if (!title.value.trim()) {
+                    showError(title, 'Title is required');
+                    isValid = false;
+                }
+                
+                if (!primaryArtist.value.trim()) {
+                    showError(primaryArtist, 'Primary Artist is required');
+                    isValid = false;
+                }
+            }
+            
+            return isValid;
+        }
+        
+        function showError(field, message) {
+            field.classList.add('error');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            field.parentNode.appendChild(errorDiv);
         }
 
         function previousStep() {
@@ -365,6 +492,12 @@
         document.getElementById('registrationForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
+            // Validate all required fields before submission
+            if (!validateAllSteps()) {
+                alert('Please fill in all required fields before submitting.');
+                return;
+            }
+            
             // Show progress indicator
             document.getElementById('progressIndicator').style.display = 'block';
             document.getElementById('submitBtn').disabled = true;
@@ -400,6 +533,13 @@
             await simulateSubmission();
         });
         
+        function validateAllSteps() {
+            const title = document.getElementById('title').value.trim();
+            const primaryArtist = document.getElementById('primaryArtist').value.trim();
+            
+            return title && primaryArtist;
+        }
+        
         async function simulateSubmission() {
             const progressFill = document.getElementById('progressFill');
             const progressText = document.getElementById('progressText');
@@ -428,6 +568,9 @@
             document.getElementById('progressIndicator').style.display = 'none';
             document.getElementById('successMessage').style.display = 'block';
             document.getElementById('registrationId').textContent = 'ME-' + Date.now();
+            
+            // Clear saved data after successful submission
+            localStorage.removeItem('musicEngineRegistration');
             
             // Hide form
             document.querySelector('.form-container').style.display = 'none';

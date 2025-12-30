@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>End User License Agreement - Music Engine</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    <script src="login.js"></script>
+
 </head>
 <body>
     <!-- Header -->
@@ -19,7 +18,7 @@
                 <li><a href="services.html">Services</a></li>
                 <li><a href="governance.html">Governance</a></li>
                 <li><a href="about.html">About Us</a></li>
-                <li><a href="#" class="btn" onclick="openLoginModal()">Login/Signup</a></li>
+                <li><a href="#" class="btn">Login/Signup</a></li>
             </ul>
         </nav>
     </header>
@@ -95,10 +94,9 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="footer-links">
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="eula.html">EULA</a>
-                    <a href="terms.html">Terms of Usage</a>
+                <div></div>
+                <div class="footer-copyright">
+                    <p>&copy; 2024 Music Engine. Powered by Boserena Studio.</p>
                 </div>
                 <div class="social-media">
                     <a href="#" class="social-icon">📘</a>
@@ -107,22 +105,13 @@
                     <a href="#" class="social-icon">🎵</a>
                 </div>
             </div>
-            <p>&copy; 2024 Music Engine. Powered by Boserena Studio. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="eula.html">EULA</a>
+                <a href="terms.html">Terms of Usage</a>
+            </div>
         </div>
     </footer>
 
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeLoginModal()">&times;</span>
-            <h2>🔐 QR Code Login</h2>
-            <p>Scan the QR code with your mobile device to login securely</p>
-            <div class="qr-container">
-                <canvas id="qrcode"></canvas>
-            </div>
-            <button class="btn" onclick="generateQR()">Generate New QR Code</button>
-            <p class="qr-status" id="qrStatus">Waiting for scan...</p>
-        </div>
-    </div>
 </body>
 </html>
