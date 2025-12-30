@@ -143,6 +143,15 @@
                                 <div class="dynamic-entry">
                                     <div class="form-row">
                                         <div class="form-group">
+                                            <label>Role:</label>
+                                            <select>
+                                                <option value="composer-author">Composer/Author</option>
+                                                <option value="composer">Composer</option>
+                                                <option value="lyricist">Lyricist</option>
+                                                <option value="arranger">Arranger</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
                                             <label>Name:</label>
                                             <input type="text" placeholder="Songwriter name">
                                         </div>
@@ -164,6 +173,15 @@
                             <div id="publishersContainer">
                                 <div class="dynamic-entry">
                                     <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Type:</label>
+                                            <select>
+                                                <option value="original-publisher">Original Publisher</option>
+                                                <option value="sub-publisher">Sub Publisher</option>
+                                                <option value="publisher">Publisher</option>
+                                                <option value="administrator">Administrator</option>
+                                            </select>
+                                        </div>
                                         <div class="form-group">
                                             <label>Name:</label>
                                             <input type="text" placeholder="Publisher name">
@@ -285,6 +303,15 @@
                 <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
                 <div class="form-row">
                     <div class="form-group">
+                        <label>Role:</label>
+                        <select>
+                            <option value="composer-author">Composer/Author</option>
+                            <option value="composer">Composer</option>
+                            <option value="lyricist">Lyricist</option>
+                            <option value="arranger">Arranger</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label>Name:</label>
                         <input type="text" placeholder="Songwriter name">
                     </div>
@@ -304,6 +331,15 @@
             newEntry.innerHTML = `
                 <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
                 <div class="form-row">
+                    <div class="form-group">
+                        <label>Type:</label>
+                        <select>
+                            <option value="original-publisher">Original Publisher</option>
+                            <option value="sub-publisher">Sub Publisher</option>
+                            <option value="publisher">Publisher</option>
+                            <option value="administrator">Administrator</option>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label>Name:</label>
                         <input type="text" placeholder="Publisher name">
