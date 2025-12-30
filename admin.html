@@ -23,6 +23,9 @@
         <div class="container">
             <h2 class="section-title">Admin Dashboard</h2>
             
+            <!-- Test Button -->
+            <button onclick="document.getElementById('userManagementModal').style.display='block'" style="background: red; color: white; padding: 10px; margin: 10px;">TEST: Open User Modal</button>
+            
             <div class="admin-stats">
                 <div class="stat-card">
                     <h3>Total Users</h3>
@@ -222,6 +225,7 @@
 
         // User Management Functions
         function showUserManagement() {
+            console.log('showUserManagement called');
             document.getElementById('userManagementModal').style.display = 'block';
             loadUsers();
         }
