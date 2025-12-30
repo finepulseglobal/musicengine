@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Music Engine</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    <script src="login.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -19,7 +17,7 @@
                 <li><a href="services.html">Services</a></li>
                 <li><a href="governance.html">Governance</a></li>
                 <li><a href="about.html">About Us</a></li>
-                <li><a href="#" class="btn" onclick="openLoginModal()">Login/Signup</a></li>
+                <li><a href="#" class="btn">Login/Signup</a></li>
             </ul>
         </nav>
     </header>
@@ -194,6 +192,21 @@
                         <button type="button" class="btn" id="nextBtn" onclick="nextStep()">Next</button>
                         <button type="submit" class="btn" id="submitBtn" style="display: none;">Submit Registration</button>
                     </div>
+                    
+                    <!-- Progress Indicator -->
+                    <div id="progressIndicator" style="display: none; margin-top: 1rem; text-align: center;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <p id="progressText">Processing...</p>
+                    </div>
+                    
+                    <!-- Success Message -->
+                    <div id="successMessage" style="display: none; margin-top: 1rem; text-align: center; color: #28a745;">
+                        <h3>✅ Registration Successful!</h3>
+                        <p>Your music has been registered with ID: <strong id="registrationId"></strong></p>
+                        <a href="profile.html" class="btn">View Profile</a>
+                    </div>
                 </form>
             </div>
         </div>
@@ -219,19 +232,7 @@
         </div>
     </footer>
 
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeLoginModal()">&times;</span>
-            <h2>🔐 QR Code Login</h2>
-            <p>Scan the QR code with your mobile device to login securely</p>
-            <div class="qr-container">
-                <canvas id="qrcode"></canvas>
-            </div>
-            <button class="btn" onclick="generateQR()">Generate New QR Code</button>
-            <p class="qr-status" id="qrStatus">Waiting for scan...</p>
-        </div>
-    </div>
+
 
     <script>
         let currentStep = 1;
@@ -324,10 +325,80 @@
             container.appendChild(newEntry);
         }
 
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            alert('Music registration submitted successfully!');
+            
+            // Show progress indicator
+            document.getElementById('progressIndicator').style.display = 'block';
+            document.getElementById('submitBtn').disabled = true;
+            
+            // Collect form data
+            const formData = new FormData();
+            
+            // Step 1 data
+            formData.append('title', document.getElementById('title').value);
+            formData.append('primaryArtist', document.getElementById('primaryArtist').value);
+            formData.append('catalogNo', document.getElementById('catalogNo').value);
+            formData.append('featuredArtist', document.getElementById('featuredArtist').value);
+            formData.append('isrc', document.getElementById('isrc').value);
+            formData.append('duration', document.getElementById('duration').value);
+            formData.append('releaseDate', document.getElementById('releaseDate').value);
+            
+            // Step 2 data
+            formData.append('recordingLocation', document.getElementById('recordingLocation').value);
+            formData.append('key', document.getElementById('key').value);
+            formData.append('bpm', document.getElementById('bpm').value);
+            formData.append('language', document.getElementById('language').value);
+            formData.append('lyrics', document.getElementById('lyrics').value);
+            formData.append('aiGenerated', document.getElementById('aiGenerated').checked);
+            formData.append('containsSamples', document.getElementById('containsSamples').checked);
+            
+            // Files
+            const musicFile = document.getElementById('musicFile').files[0];
+            const artworkFile = document.getElementById('artworkFile').files[0];
+            if (musicFile) formData.append('musicFile', musicFile);
+            if (artworkFile) formData.append('artworkFile', artworkFile);
+            
+            // Simulate AJAX submission with progress
+            await simulateSubmission();
         });
+        
+        async function simulateSubmission() {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            // Step 1: Validating data
+            progressText.textContent = 'Validating submission data...';
+            progressFill.style.width = '20%';
+            await sleep(1000);
+            
+            // Step 2: Processing files
+            progressText.textContent = 'Processing audio and artwork files...';
+            progressFill.style.width = '50%';
+            await sleep(1500);
+            
+            // Step 3: Generating copyright certificate
+            progressText.textContent = 'Generating copyright certificate...';
+            progressFill.style.width = '80%';
+            await sleep(1000);
+            
+            // Step 4: Finalizing registration
+            progressText.textContent = 'Finalizing registration...';
+            progressFill.style.width = '100%';
+            await sleep(800);
+            
+            // Show success
+            document.getElementById('progressIndicator').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('registrationId').textContent = 'ME-' + Date.now();
+            
+            // Hide form
+            document.querySelector('.form-container').style.display = 'none';
+        }
+        
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
     </script>
 </body>
 </html>
