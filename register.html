@@ -290,9 +290,9 @@
             const nextBtn = document.getElementById('nextBtn');
             const submitBtn = document.getElementById('submitBtn');
 
-            prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
-            nextBtn.style.display = currentStep < 3 ? 'block' : 'none';
-            submitBtn.style.display = currentStep === 3 ? 'block' : 'none';
+            prevBtn.style.display = currentStep > 1 ? 'inline-block' : 'none';
+            nextBtn.style.display = currentStep < 3 ? 'inline-block' : 'none';
+            submitBtn.style.display = currentStep === 3 ? 'inline-block' : 'none';
         }
 
         function addSongwriter() {
