@@ -54,7 +54,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="catalogNo">Catalog No:</label>
-                                <input type="text" id="catalogNo" placeholder="Catalog number">
+                                <input type="text" id="catalogNo" placeholder="Catalog number" required>
                             </div>
                         </div>
                         <div class="form-row">
@@ -69,22 +69,34 @@
                                 <label>Featured Artist:</label>
                                 <input type="text" id="featuredArtist" placeholder="Featured artist (optional)">
                             </div>
+                            <div class="form-group">
+                                <label for="releaseType">Release Type:</label>
+                                <select id="releaseType" required>
+                                    <option value="">Select release type</option>
+                                    <option value="single">Single</option>
+                                    <option value="album">Album</option>
+                                    <option value="ep">EP</option>
+                                    <option value="compilation">Compilation</option>
+                                    <option value="soundtrack">Soundtrack</option>
+                                    <option value="remix">Remix</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>ISRC:</label>
                                 <div class="tooltip">
-                                    <input type="text" id="isrc" placeholder="USRC17607839">
+                                    <input type="text" id="isrc" placeholder="USRC17607839" required>
                                     <span class="tooltiptext">International Standard Recording Code - unique identifier for recordings</span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Duration:</label>
-                                <input type="text" id="duration" placeholder="03:45">
+                                <input type="text" id="duration" placeholder="03:45" required>
                             </div>
                             <div class="form-group">
                                 <label>Release Date:</label>
-                                <input type="date" id="releaseDate">
+                                <input type="date" id="releaseDate" required>
                             </div>
                         </div>
                     </div>
@@ -117,8 +129,13 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Music File:</label>
+                            <label id="musicFileLabel">Music File:</label>
                             <input type="file" id="musicFile" accept="audio/*">
+                            <div id="multipleFilesContainer" style="display: none;">
+                                <p>Upload up to 20 audio files for your EP/Album/Compilation:</p>
+                                <input type="file" id="musicFiles" accept="audio/*" multiple>
+                                <div id="fileList"></div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Artwork:</label>
@@ -345,7 +362,65 @@
         });
         
         // Initialize auto-save when page loads
-        document.addEventListener('DOMContentLoaded', initAutoSave);
+        document.addEventListener('DOMContentLoaded', function() {
+            initAutoSave();
+            
+            // Add release type change listener
+            document.getElementById('releaseType').addEventListener('change', handleReleaseTypeChange);
+            
+            // Add multiple files listener
+            document.getElementById('musicFiles').addEventListener('change', handleMultipleFiles);
+        });
+        
+        function handleReleaseTypeChange() {
+            const releaseType = document.getElementById('releaseType').value;
+            const singleFileContainer = document.getElementById('musicFile').parentElement;
+            const multipleFilesContainer = document.getElementById('multipleFilesContainer');
+            const musicFileLabel = document.getElementById('musicFileLabel');
+            
+            if (releaseType === 'ep' || releaseType === 'album' || releaseType === 'compilation') {
+                // Show multiple files upload
+                document.getElementById('musicFile').style.display = 'none';
+                multipleFilesContainer.style.display = 'block';
+                musicFileLabel.textContent = 'Music Files:';
+            } else {
+                // Show single file upload
+                document.getElementById('musicFile').style.display = 'block';
+                multipleFilesContainer.style.display = 'none';
+                musicFileLabel.textContent = 'Music File:';
+                // Clear multiple files if any
+                document.getElementById('musicFiles').value = '';
+                document.getElementById('fileList').innerHTML = '';
+            }
+        }
+        
+        function handleMultipleFiles(event) {
+            const files = event.target.files;
+            const fileList = document.getElementById('fileList');
+            
+            if (files.length > 20) {
+                alert('Maximum 20 files allowed. Please select fewer files.');
+                event.target.value = '';
+                return;
+            }
+            
+            fileList.innerHTML = '';
+            
+            if (files.length > 0) {
+                const listElement = document.createElement('ul');
+                listElement.style.marginTop = '10px';
+                
+                for (let i = 0; i < files.length; i++) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${i + 1}. ${files[i].name}`;
+                    listItem.style.fontSize = '0.9rem';
+                    listItem.style.color = '#667eea';
+                    listElement.appendChild(listItem);
+                }
+                
+                fileList.appendChild(listElement);
+            }
+        }
 
         function nextStep() {
             if (currentStep < 3) {
@@ -373,18 +448,23 @@
             currentStepElement.querySelectorAll('.error').forEach(field => field.classList.remove('error'));
             
             if (currentStep === 1) {
-                const title = document.getElementById('title');
-                const primaryArtist = document.getElementById('primaryArtist');
+                const requiredFields = [
+                    { id: 'title', name: 'Title' },
+                    { id: 'catalogNo', name: 'Catalog No' },
+                    { id: 'primaryArtist', name: 'Primary Artist' },
+                    { id: 'releaseType', name: 'Release Type' },
+                    { id: 'isrc', name: 'ISRC' },
+                    { id: 'duration', name: 'Duration' },
+                    { id: 'releaseDate', name: 'Release Date' }
+                ];
                 
-                if (!title.value.trim()) {
-                    showError(title, 'Title is required');
-                    isValid = false;
-                }
-                
-                if (!primaryArtist.value.trim()) {
-                    showError(primaryArtist, 'Primary Artist is required');
-                    isValid = false;
-                }
+                requiredFields.forEach(field => {
+                    const element = document.getElementById(field.id);
+                    if (!element.value.trim()) {
+                        showError(element, `${field.name} is required`);
+                        isValid = false;
+                    }
+                });
             }
             
             return isValid;
@@ -524,9 +604,18 @@
             formData.append('containsSamples', document.getElementById('containsSamples').checked);
             
             // Files
-            const musicFile = document.getElementById('musicFile').files[0];
+            const releaseType = document.getElementById('releaseType').value;
+            if (releaseType === 'ep' || releaseType === 'album' || releaseType === 'compilation') {
+                const musicFiles = document.getElementById('musicFiles').files;
+                for (let i = 0; i < musicFiles.length; i++) {
+                    formData.append(`musicFile${i}`, musicFiles[i]);
+                }
+            } else {
+                const musicFile = document.getElementById('musicFile').files[0];
+                if (musicFile) formData.append('musicFile', musicFile);
+            }
+            
             const artworkFile = document.getElementById('artworkFile').files[0];
-            if (musicFile) formData.append('musicFile', musicFile);
             if (artworkFile) formData.append('artworkFile', artworkFile);
             
             // Simulate AJAX submission with progress
@@ -534,10 +623,15 @@
         });
         
         function validateAllSteps() {
-            const title = document.getElementById('title').value.trim();
-            const primaryArtist = document.getElementById('primaryArtist').value.trim();
+            const requiredFields = [
+                'title', 'catalogNo', 'primaryArtist', 'releaseType', 
+                'isrc', 'duration', 'releaseDate'
+            ];
             
-            return title && primaryArtist;
+            return requiredFields.every(fieldId => {
+                const field = document.getElementById(fieldId);
+                return field && field.value.trim();
+            });
         }
         
         async function simulateSubmission() {
