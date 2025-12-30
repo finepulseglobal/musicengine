@@ -42,7 +42,7 @@
                         <h3>Work Information - Step 1 of 3</h3>
                         <div class="form-row">
                             <div class="form-group">
-                            <label for="workcode">Work Code:</label>
+                                <label for="workcode">Work Code:</label>
                                 <input type="text" id="workcode" value="WRK123456" readonly>
                             </div>
                             <div class="form-group">
@@ -59,14 +59,14 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Primary Artist:</label>
+                                <label for="primaryArtist">Primary Artist:</label>
                                 <div class="tooltip">
                                     <input type="text" id="primaryArtist" placeholder="Primary artist name" required>
                                     <span class="tooltiptext">Main performing artist or band name</span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Featured Artist:</label>
+                                <label for="featuredArtist">Featured Artist:</label>
                                 <input type="text" id="featuredArtist" placeholder="Featured artist (optional)">
                             </div>
                             <div class="form-group">
@@ -84,18 +84,18 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>ISRC:</label>
+                                <label for="isrc">ISRC:</label>
                                 <div class="tooltip">
                                     <input type="text" id="isrc" placeholder="USRC17607839" required>
                                     <span class="tooltiptext">International Standard Recording Code - unique identifier for recordings</span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Duration:</label>
+                                <label for="duration">Duration:</label>
                                 <input type="text" id="duration" placeholder="03:45" required>
                             </div>
                             <div class="form-group">
-                                <label>Release Date:</label>
+                                <label for="releaseDate">Release Date:</label>
                                 <input type="date" id="releaseDate" required>
                             </div>
                         </div>
@@ -106,21 +106,21 @@
                         <h3>Session Info, Files & Lyrics - Step 2 of 3</h3>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Recording Location:</label>
+                                <label for="recordingLocation">Recording Location:</label>
                                 <input type="text" id="recordingLocation" placeholder="Studio name or location">
                             </div>
                             <div class="form-group">
-                                <label>Key:</label>
+                                <label for="key">Key:</label>
                                 <input type="text" id="key" placeholder="C Major, A Minor, etc.">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>BPM:</label>
+                                <label for="bpm">BPM:</label>
                                 <input type="number" id="bpm" placeholder="120">
                             </div>
                             <div class="form-group">
-                                <label>Language:</label>
+                                <label for="language">Language:</label>
                                 <select id="language">
                                     <option value="EN">English</option>
                                     <option value="ES">Spanish</option>
@@ -138,7 +138,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Artwork:</label>
+                            <label for="artworkFile">Artwork:</label>
                             <input type="file" id="artworkFile" accept="image/*">
                         </div>
                         <div class="form-group">
@@ -152,8 +152,35 @@
                             </label>
                         </div>
                         <div class="form-group">
-                            <label>Lyrics:</label>
+                            <label for="lyrics">Lyrics:</label>
                             <textarea id="lyrics" placeholder="Enter song lyrics here..."></textarea>
+                        </div>
+                        
+                        <!-- Production Credits -->
+                        <div class="dynamic-section">
+                            <div class="section-header">
+                                <h4>Production Credits</h4>
+                                <button type="button" class="btn" onclick="addProductionCredit()">+ Add Credit</button>
+                            </div>
+                            <div id="productionCreditsContainer">
+                                <div class="dynamic-entry">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Role:</label>
+                                            <select>
+                                                <option value="producer">Producer</option>
+                                                <option value="mix-engineer">Mix Engineer</option>
+                                                <option value="label">Label</option>
+                                                <option value="production-company">Production Company</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Name:</label>
+                                            <input type="text" placeholder="Enter name">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -563,6 +590,31 @@
                             <option value="US">United States</option>
                             <option value="EU">Europe</option>
                         </select>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newEntry);
+        }
+        
+        function addProductionCredit() {
+            const container = document.getElementById('productionCreditsContainer');
+            const newEntry = document.createElement('div');
+            newEntry.className = 'dynamic-entry';
+            newEntry.innerHTML = `
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Role:</label>
+                        <select>
+                            <option value="producer">Producer</option>
+                            <option value="mix-engineer">Mix Engineer</option>
+                            <option value="label">Label</option>
+                            <option value="production-company">Production Company</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" placeholder="Enter name">
                     </div>
                 </div>
             `;
